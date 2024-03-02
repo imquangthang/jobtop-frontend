@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Login.scss";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
-import {loginUser} from "../../services/userService"
+import { loginUser } from "../../services/userService";
 
 const Login = (props) => {
   let history = useHistory();
@@ -20,21 +20,36 @@ const Login = (props) => {
     history.push("/register");
   };
 
-  const handleLogin = async() => {
+  const handleLogin = async () => {
     setObjValidInput(defaultObjValidInput);
     if (!valueLogin) {
-      setObjValidInput({...defaultObjValidInput, isValidValueLogin: false});
+      setObjValidInput({ ...defaultObjValidInput, isValidValueLogin: false });
       toast.error("Please enter your email address or phone number");
       return;
     }
 
     if (!password) {
-      setObjValidInput({...defaultObjValidInput, isValidPassword: false})
+      setObjValidInput({ ...defaultObjValidInput, isValidPassword: false });
       toast.error("Please enter your password");
       return;
     }
 
-    await loginUser(valueLogin,password);
+    let response = await loginUser(valueLogin, password);
+
+    if (response && response.data && +response.data.EC === 0) {
+      // Success
+      let data = {
+        isAuthenticated: true,
+        token: "Fake token",
+      };
+      sessionStorage.setItem("account", JSON.stringify(data));
+      history.push("/users");
+    }
+
+    if (response && response.data && +response.data.EC !== 0) {
+      // ERROR
+      toast.error(response.data.EM);
+    }
   };
 
   return (
