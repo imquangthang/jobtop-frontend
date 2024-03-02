@@ -67,7 +67,7 @@ const Login = (props) => {
     }
   }, []);
   return (
-    <div className="login-contanier">
+    <div className="login-container">
       <div className="container">
         <div className="row px-3 px-sm-0">
           <div className="content-left col-12 d-none col-sm-7 d-sm-block">
