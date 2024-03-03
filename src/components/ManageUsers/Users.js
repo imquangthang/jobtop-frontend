@@ -26,10 +26,10 @@ const Users = (props) => {
   const fetchUsers = async () => {
     let response = await fetchAllUsers(currentPage, currentLimit);
 
-    if (response && response.data && response.data.EC === 0) {
-      console.log(response.data.DT);
-      setTotalPages(response.data.DT.totalPages);
-      setListUsers(response.data.DT.users);
+    if (response && response.EC === 0) {
+      console.log(response.DT);
+      setTotalPages(response.DT.totalPages);
+      setListUsers(response.DT.users);
     }
   };
 
@@ -50,12 +50,12 @@ const Users = (props) => {
   const confirmDeleteUser = async () => {
     let response = await deleteUser(dataModal);
     console.log(">>Check response: ", response);
-    if (response && response.data.EC === 0) {
-      toast.success(response.data.EM);
+    if (response && response.EC === 0) {
+      toast.success(response.EM);
       await fetchUsers();
       setIsShowModalDelete(false);
     } else {
-      toast.error(response.data.EM);
+      toast.error(response.EM);
     }
   };
 
@@ -71,7 +71,7 @@ const Users = (props) => {
     setIsShowModalUser(true);
   };
 
-  const handeleRefresh = async () => {
+  const handleRefresh = async () => {
     await fetchUsers();
   };
 
@@ -86,7 +86,7 @@ const Users = (props) => {
             <div className="actions my-3">
               <button
                 className="btn btn-success refresh"
-                onClick={() => handeleRefresh()}
+                onClick={() => handleRefresh()}
               >
                 <i class="fa fa-refresh"></i>
                 Refresh
