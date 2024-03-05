@@ -1,6 +1,6 @@
 import "./Register.scss";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -56,7 +56,7 @@ const Register = (props) => {
       return false;
     }
 
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       setObjCheckInput({
         ...defaultValidInput,
         isValidConfirmPassword: false,
@@ -72,12 +72,10 @@ const Register = (props) => {
     let check = isValidInput();
 
     if (check === true) {
-      let response = await registerNewUser(email, phone, username, password);
-      let serverData = response.data;
+      let serverData = await registerNewUser(email, phone, username, password);
       if (+serverData.EC === 0) {
         toast.success(serverData.EM);
         history.push("/login");
-        window.location.reload();
       } else {
         toast.error(serverData.EM);
         if (+serverData.EC === 1) {

@@ -1,4 +1,3 @@
-// import axios from "axios";
 import axios from "../setup/axios";
 
 const registerNewUser = (email, phone, username, password) => {
@@ -18,9 +17,7 @@ const loginUser = (valueLogin, password) => {
 };
 
 const fetchAllUsers = (page, limit) => {
-  return axios.get(
-    `/api/v1/user/read?page=${page}&limit=${limit}`
-  );
+  return axios.get(`/api/v1/user/read?page=${page}&limit=${limit}`);
 };
 
 const deleteUser = (user) => {

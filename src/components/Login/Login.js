@@ -14,6 +14,7 @@ const Login = (props) => {
     isValidValueLogin: true,
     isValidPassword: true,
   };
+
   const [objValidInput, setObjValidInput] = useState(defaultObjValidInput);
 
   const handleCreateNewAccount = () => {
@@ -60,12 +61,13 @@ const Login = (props) => {
   };
 
   useEffect(() => {
-    let session = sessionStorage.getItem("account");
-    if (session) {
-      history.push("/");
-      window.location.reload();
-    }
+    // let session = sessionStorage.getItem("account");
+    // if (session) {
+    //   history.push("/");
+    //   window.location.reload();
+    // }
   }, []);
+
   return (
     <div className="login-container">
       <div className="container">
