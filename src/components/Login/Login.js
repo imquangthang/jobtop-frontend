@@ -46,7 +46,7 @@ const Login = (props) => {
       let email = response.DT.email;
       let username = response.DT.username;
       let token = response.DT.access_token;
-      
+
       let data = {
         isAuthenticated: true,
         token,
@@ -56,6 +56,8 @@ const Login = (props) => {
           username,
         },
       };
+
+      localStorage.setItem("jwt", token);
       loginContext(data);
       history.push("/users");
     }
