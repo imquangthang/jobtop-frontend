@@ -11,7 +11,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import logo from "../../logo.svg";
+import logo from "../../logo.png";
 import { logoutUser } from "../../services/userService";
 import { toast } from "react-toastify";
 
@@ -36,18 +36,24 @@ const NavHeader = (props) => {
     return (
       <>
         <div className="nav-header">
-          <Navbar expand="lg" className="bg-body-tertiary" bg="header">
-            <Container>
-              <Navbar.Brand href="#home">
+          <Navbar
+            expand="lg"
+            className="bg-body-tertiary navbar-light bg-light"
+            bg="header"
+          >
+            <Navbar.Brand href="#home">
+              <h3 className="brand">
                 <img
                   src={logo}
                   width="30"
                   height="30"
-                  className="d-inline-block align-top me-2"
+                  className="d-inline-block align-top mx-3"
                   alt="Logo"
                 />
-                <span className="brand-name">React</span>
-              </Navbar.Brand>
+                <span className="brand-name">JOBTOP</span>
+              </h3>
+            </Navbar.Brand>
+            <Container>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
@@ -84,7 +90,12 @@ const NavHeader = (props) => {
                     </>
                   ) : (
                     <Link className="nav-link" to="/login">
-                      Login
+                      <button
+                        class="btn btn-outline-info me-2 mb-1"
+                        type="button"
+                      >
+                        Đăng Nhập
+                      </button>
                     </Link>
                   )}
                 </Nav>

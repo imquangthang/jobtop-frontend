@@ -4,6 +4,7 @@ import Register from "../components/Register/Register";
 import Users from "../components/ManageUsers/Users";
 import PrivateRoutes from "./PrivateRoutes";
 import Role from "../components/Role/Role";
+import Home from "../components/Home/Home";
 
 const AppRoutes = (props) => {
   const Project = () => {
@@ -23,7 +24,7 @@ const AppRoutes = (props) => {
           <Register />
         </Route>
         <Route path="/" exact>
-          Home
+          <Home />
         </Route>
         <Route path="*">404 Not Found</Route>
       </Switch>

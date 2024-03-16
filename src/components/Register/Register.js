@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerNewUser } from "../../services/userService";
+import logo from "../../logo.png";
 
 const Register = (props) => {
   const [email, setEmail] = useState("");
@@ -92,8 +93,17 @@ const Register = (props) => {
       <div className="container">
         <div className="row px-3 px-sm-0">
           <div className="content-left col-12 d-none col-sm-7 d-sm-block">
-            <div className="brand">THANG</div>
-            <div className="detail">THANG Learning everything</div>
+            <div className="brand">
+              <img
+                src={logo}
+                width="50"
+                height="50"
+                className="d-inline-block align-top me-3"
+                alt="Logo"
+              />
+              <div className="brand__name">JOBTOP</div>
+            </div>
+            <div className="detail">Việc Làm Dành Cho Bạn</div>
           </div>
 
           <div className="content-right col-sm-5 col-12 d-flex flex-column gap-3 py-3">

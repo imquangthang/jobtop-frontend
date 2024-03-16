@@ -23,12 +23,14 @@
 }
 
 .nav-header {
-  .bg-header {
-    background-color: #20232a;
+  .brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .navbar-brand {
-    color: #61dafb !important;
+    color: #000 !important;
 
     img {
       animation: App-logo-spin infinite 20s linear;
@@ -48,17 +50,17 @@
   .navbar-nav {
     a,
     .nav-link {
-      color: #fff !important;
+      color: #bfc0c0 !important;
 
       &:hover {
-        color: #61dafb !important;
+        color: #000 !important;
       }
     }
   }
 
   .nav-link {
     &.active {
-      color: #61dafb !important;
+      color: #000 !important;
     }
   }
 
