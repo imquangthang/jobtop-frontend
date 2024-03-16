@@ -35,73 +35,71 @@ const NavHeader = (props) => {
   if ((user && user.isAuthenticated === true) || location.pathname === "/") {
     return (
       <>
-        <div className="nav-header">
-          <Navbar
-            expand="lg"
-            className="bg-body-tertiary navbar-light bg-light"
-            bg="header"
-          >
-            <Navbar.Brand href="#home">
-              <h3 className="brand">
-                <img
-                  src={logo}
-                  width="30"
-                  height="30"
-                  className="d-inline-block align-top mx-3"
-                  alt="Logo"
-                />
-                <span className="brand-name">JOBTOP</span>
-              </h3>
-            </Navbar.Brand>
-            <Container>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                  <NavLink to="/" exact className="nav-link">
-                    Home
-                  </NavLink>
-                  <NavLink to="/users" className="nav-link">
-                    Users
-                  </NavLink>
-                  <NavLink to="/roles" className="nav-link">
-                    Roles
-                  </NavLink>
-                  <NavLink to="/projects" className="nav-link">
-                    Projects
-                  </NavLink>
-                  <NavLink to="/about" className="nav-link">
-                    About
-                  </NavLink>
-                </Nav>
-                <Nav>
-                  {user && user.isAuthenticated === true ? (
-                    <>
-                      <Nav.Item className="nav-link">
-                        WELCOME {user.account.username} !
-                      </Nav.Item>
+        <div className="navbar-light bg-light">
+          <div className="nav-header container">
+            <Navbar expand="lg" className="bg-body-tertiary" bg="header">
+              <Navbar.Brand href="#home">
+                <h3 className="brand">
+                  <img
+                    src={logo}
+                    width="30"
+                    height="30"
+                    className="d-inline-block align-top mx-3"
+                    alt="Logo"
+                  />
+                  <span className="brand-name">JOBTOP</span>
+                </h3>
+              </Navbar.Brand>
+              <Container>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                  <Nav className="me-auto">
+                    <NavLink to="/" exact className="nav-link">
+                      Home
+                    </NavLink>
+                    <NavLink to="/users" className="nav-link">
+                      Users
+                    </NavLink>
+                    <NavLink to="/roles" className="nav-link">
+                      Roles
+                    </NavLink>
+                    <NavLink to="/projects" className="nav-link">
+                      Projects
+                    </NavLink>
+                    <NavLink to="/about" className="nav-link">
+                      About
+                    </NavLink>
+                  </Nav>
+                  <Nav>
+                    {user && user.isAuthenticated === true ? (
+                      <>
+                        <Nav.Item className="nav-link welcome">
+                          WELCOME {user.account.username} !
+                        </Nav.Item>
 
-                      <NavDropdown title="Settings" id="basic-nav-dropdown">
-                        <NavDropdown.Item>Change Password</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item>
-                          <span onClick={() => handleLogout()}>Log out</span>
-                        </NavDropdown.Item>
-                      </NavDropdown>
-                    </>
-                  ) : (
-                    <Link className="nav-link" to="/login">
-                      <button
-                        class="btn btn-outline-info me-2 mb-1"
-                        type="button"
-                      >
-                        Đăng Nhập
-                      </button>
-                    </Link>
-                  )}
-                </Nav>
-              </Navbar.Collapse>
-            </Container>
-          </Navbar>
+                        <NavDropdown title="Settings" id="basic-nav-dropdown">
+                          <NavDropdown.Item>Change Password</NavDropdown.Item>
+                          <NavDropdown.Divider />
+                          <NavDropdown.Item>
+                            <span onClick={() => handleLogout()}>Log out</span>
+                          </NavDropdown.Item>
+                        </NavDropdown>
+                      </>
+                    ) : (
+                      <Link className="nav-link" to="/login">
+                        <button
+                          class="btn btn-outline-info me-2 mb-1"
+                          type="button"
+                        >
+                          Đăng Nhập
+                        </button>
+                      </Link>
+                    )}
+                  </Nav>
+                </Navbar.Collapse>
+              </Container>
+            </Navbar>
+          </div>
         </div>
       </>
     );
