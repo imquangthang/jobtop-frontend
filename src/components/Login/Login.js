@@ -1,13 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import "./Login.scss";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { loginUser } from "../../services/userService";
 import { UserContext } from "../../context/UserContext";
 import logo from "../../logo.png";
 
 const Login = (props) => {
-  const { loginContext } = useContext(UserContext);
+  const { user, loginContext } = useContext(UserContext);
 
   let history = useHistory();
 
@@ -75,26 +75,36 @@ const Login = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (user && user.isAuthenticated) {
+      history.push("/");
+    }
+  }, []);
+
   return (
     <div className="login-container">
       <div className="container">
         <div className="row px-3 px-sm-0">
           <div className="content-left col-12 d-none col-sm-7 d-sm-block">
             <div className="brand">
-              <img
-                src={logo}
-                width="50"
-                height="50"
-                className="d-inline-block align-top me-3"
-                alt="Logo"
-              />
-              <div className="brand__name my-3">JOBTOP</div>
+              <Link to="/">
+                <span title="Return to HomePage" className="brand-item">
+                  <img
+                    src={logo}
+                    width="50"
+                    height="50"
+                    className="d-inline-block align-top me-3"
+                    alt="Logo"
+                  />
+                  <div className="brand__name my-3">JOBTOP</div>
+                </span>
+              </Link>
             </div>
             <div className="detail">Việc Làm Dành Cho Bạn</div>
           </div>
 
           <div className="content-right col-sm-5 col-12 d-flex flex-column gap-3 py-3">
-            <div className="brand d-sm-none">THANG</div>
+            <div className="brand d-sm-none">JOBTOP</div>
             <input
               type="text"
               className={
@@ -138,6 +148,12 @@ const Login = (props) => {
               >
                 Create new account
               </button>
+              <div className="mt-3 return">
+                <Link to="/">
+                  <i className="fa fa-arrow-circle-left"></i>
+                  <span title="Return to HomePage"> Return to HomePage </span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

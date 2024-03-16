@@ -2,7 +2,11 @@ import { fetchGroup } from "../../services/userService";
 import { useState, useEffect } from "react";
 import "./GroupRole.scss";
 import { toast } from "react-toastify";
-import { fetchAllRoles, fetchRolesByGroup } from "../../services/roleService";
+import {
+  fetchAllRoles,
+  fetchRolesByGroup,
+  assignRolesToGroup,
+} from "../../services/roleService";
 import _, { cloneDeep } from "lodash";
 
 const GroupRole = () => {
@@ -41,10 +45,6 @@ const GroupRole = () => {
       if (data && +data.EC === 0) {
         let result = buildDataRolesByGroup(data.DT.Roles, listRoles);
         setAssignRolesByGroup(result);
-
-        console.log("Check groupRoles: ", data.DT);
-        console.log("Check allRoles: ", listRoles);
-        console.log("Check result: ", result);
       }
     }
   };
@@ -82,6 +82,31 @@ const GroupRole = () => {
     }
 
     setAssignRolesByGroup(_assignRolesByGroup);
+  };
+
+  const buildDataToSave = () => {
+    let result = {};
+    const _assignRolesByGroup = _.cloneDeep(assignRolesByGroup);
+    result.groupId = selectGroup;
+    let groupRolesFilter = _assignRolesByGroup.filter(
+      (item) => item.isAssigned === true
+    );
+    let finalGroupRoles = groupRolesFilter.map((item) => {
+      let data = { groupId: +selectGroup, roleId: +item.id };
+      return data;
+    });
+    result.groupRoles = finalGroupRoles;
+    return result;
+  };
+
+  const handleSave = async () => {
+    let data = buildDataToSave();
+    let res = await assignRolesToGroup(data);
+    if (res && res.EC === 0) {
+      toast.success(res.EM);
+    }else{
+      toast.error(res.EM);
+    }
   };
 
   return (
@@ -138,7 +163,12 @@ const GroupRole = () => {
                     );
                   })}
                 <div className="mt-3">
-                  <button className="btn btn-warning">Save</button>
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => handleSave()}
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
             )}

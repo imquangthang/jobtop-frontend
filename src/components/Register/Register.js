@@ -1,13 +1,16 @@
 import "./Register.scss";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 // import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { registerNewUser } from "../../services/userService";
 import logo from "../../logo.png";
+import { UserContext } from "../../context/UserContext";
 
 const Register = (props) => {
+  const { user } = useContext(UserContext);
+
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [username, setUsername] = useState("");
@@ -27,9 +30,9 @@ const Register = (props) => {
   };
 
   useEffect(() => {
-    // axios.get("http://localhost:8080/api/v1/test-api").then((data) => {
-    //   console.log(">>> check data axios: ", data);
-    // });
+    if (user && user.isAuthenticated) {
+      history.push("/");
+    }
   }, []);
 
   const isValidInput = () => {
@@ -94,20 +97,24 @@ const Register = (props) => {
         <div className="row px-3 px-sm-0">
           <div className="content-left col-12 d-none col-sm-7 d-sm-block">
             <div className="brand">
-              <img
-                src={logo}
-                width="50"
-                height="50"
-                className="d-inline-block align-top me-3"
-                alt="Logo"
-              />
-              <div className="brand__name">JOBTOP</div>
+              <Link to="/">
+                <span title="Return to HomePage" className="brand-item">
+                  <img
+                    src={logo}
+                    width="50"
+                    height="50"
+                    className="d-inline-block align-top me-3"
+                    alt="Logo"
+                  />
+                  <div className="brand__name my-3">JOBTOP</div>
+                </span>
+              </Link>
             </div>
             <div className="detail">Việc Làm Dành Cho Bạn</div>
           </div>
 
           <div className="content-right col-sm-5 col-12 d-flex flex-column gap-3 py-3">
-            <div className="brand d-sm-none">THANG</div>
+            <div className="brand d-sm-none">JOBTOP</div>
             <div className="form-group">
               <label>Email:</label>
               <input
@@ -191,6 +198,12 @@ const Register = (props) => {
               <button className="btn btn-success" onClick={() => handleLogin()}>
                 Already've an account. Login
               </button>
+              <div className="mt-3 return">
+                <Link to="/">
+                  <i className="fa fa-arrow-circle-left"></i>
+                  <span title="Return to HomePage"> Return to HomePage </span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
