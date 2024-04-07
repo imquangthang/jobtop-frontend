@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import "./Nav.scss";
+import React, { useContext } from "react";
+import "./NavHeader.scss";
 import {
   Link,
   NavLink,
@@ -14,6 +14,8 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../logo.png";
 import { logoutUser } from "../../services/userService";
 import { toast } from "react-toastify";
+import { dropRight } from "lodash";
+import { Dropdown } from "bootstrap";
 
 const NavHeader = (props) => {
   const { user, logoutContext } = useContext(UserContext);
@@ -38,7 +40,7 @@ const NavHeader = (props) => {
         <div className="navbar-light bg-light">
           <div className="nav-header container">
             <Navbar expand="lg" className="bg-body-tertiary" bg="header">
-              <Navbar.Brand href="#home">
+              <Navbar.Brand href="/">
                 <h3 className="brand">
                   <img
                     src={logo}
@@ -57,21 +59,62 @@ const NavHeader = (props) => {
                     <NavLink to="/" exact className="nav-link">
                       Home
                     </NavLink>
-                    <NavLink to="/users" className="nav-link">
-                      Users
-                    </NavLink>
-                    <NavLink to="/roles" className="nav-link">
-                      Roles
-                    </NavLink>
-                    <NavLink to="/group-role" className="nav-link">
-                      Group-Role
-                    </NavLink>
-                    <NavLink to="/projects" className="nav-link">
-                      Projects
-                    </NavLink>
-                    <NavLink to="/about" className="nav-link">
-                      About
-                    </NavLink>
+                    <div className="dropdown">
+                      <a
+                        className={
+                          location.pathname === "/job"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                      >
+                        Việc Làm
+                      </a>
+                      <div className="dropdown-content">
+                        <NavLink to="/job" className="nav-link">
+                          Tìm việc làm
+                        </NavLink>
+                      </div>
+                    </div>
+                    <div className="dropdown">
+                      <a
+                        className={
+                          location.pathname === "/cv-template"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                      >
+                        Hồ sơ và CV
+                      </a>
+                      <div className="dropdown-content">
+                        <NavLink to="/cv-template" className="nav-link">
+                          CV Template
+                        </NavLink>
+                      </div>
+                    </div>
+                    <div className="dropdown">
+                      <a
+                        className={
+                          location.pathname === "/accounts" ||
+                          location.pathname === "/roles" ||
+                          location.pathname === "/group-role"
+                            ? "nav-link active"
+                            : "nav-link"
+                        }
+                      >
+                        Edit
+                      </a>
+                      <div className="dropdown-content">
+                        <NavLink to="/accounts" className="nav-link">
+                          Account
+                        </NavLink>
+                        <NavLink to="/roles" className="nav-link">
+                          Roles
+                        </NavLink>
+                        <NavLink to="/group-role" className="nav-link">
+                          Group-Role
+                        </NavLink>
+                      </div>
+                    </div>
                   </Nav>
                   <Nav>
                     {user && user.isAuthenticated === true ? (
@@ -91,7 +134,7 @@ const NavHeader = (props) => {
                     ) : (
                       <Link className="nav-link" to="/login">
                         <button
-                          class="btn btn-outline-info me-2 mb-1"
+                          className="btn btn-outline-info me-2 mb-1"
                           type="button"
                         >
                           Đăng Nhập

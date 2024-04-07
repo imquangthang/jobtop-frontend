@@ -1,0 +1,45 @@
+.card {
+  max-width: 440px;
+}
+
+.card-body {
+  padding: 8px !important;
+}
+
+.img-fluid {
+  display: flex;
+  height: 100% !important;
+  padding: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-title {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 280px;
+}
+
+.card-text {
+  margin-bottom: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 280px;
+}
+
+.card-tag {
+  display: flex;
+  column-gap: 5px;
+  .card-tag--salary,
+  .card-tag--address {
+    display: inline-block;
+    padding: 4px 8px;
+    color: #000;
+    background-color: #f3f5f7 !important;
+    border-radius: 5%;
+    text-overflow: ellipsis !important;
+    line-height: 16px;
+  }
+}

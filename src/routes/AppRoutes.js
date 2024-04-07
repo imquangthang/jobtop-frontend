@@ -5,19 +5,19 @@ import Users from "../components/ManageUsers/Users";
 import PrivateRoutes from "./PrivateRoutes";
 import Role from "../components/Role/Role";
 import Home from "../components/Home/Home";
+import CvTemplate from "../components/CvTemplate/CvTemplate";
 import GroupRole from "../components/GroupRole/GroupRole";
+import Job from "../components/Job/Job";
 
 const AppRoutes = (props) => {
-  const Project = () => {
-    return <span>projects</span>;
-  };
   return (
     <>
       <Switch>
-        <PrivateRoutes path="/users" component={Users} />
-        <PrivateRoutes path="/projects" component={Project} />
+        <PrivateRoutes path="/accounts" component={Users} />
         <PrivateRoutes path="/roles" component={Role} />
         <PrivateRoutes path="/group-role" component={GroupRole} />
+        <PrivateRoutes path="/cv-template" component={CvTemplate} />
+        <PrivateRoutes path="/job" component={Job} />
 
         <Route path="/login">
           <Login />
