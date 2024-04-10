@@ -117,11 +117,13 @@ const ModalUser = (props) => {
           ...defaultUserData,
           group: userGroups && userGroups.length > 0 ? userGroups[0].id : "",
         });
+        toast.success("UPDATE success");
       } else {
         toast.error(res.EM);
         let _validInputs = _.cloneDeep(validInputsDefault);
         _validInputs[res.DT] = false;
         setValidInputs(_validInputs);
+        toast.success("UPDATE unsuccess");
       }
     }
   };

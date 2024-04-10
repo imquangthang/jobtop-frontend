@@ -29,17 +29,39 @@
   width: 280px;
 }
 
-.card-tag {
+.text-muted {
   display: flex;
-  column-gap: 5px;
-  .card-tag--salary,
-  .card-tag--address {
-    display: inline-block;
-    padding: 4px 8px;
-    color: #000;
-    background-color: #f3f5f7 !important;
-    border-radius: 5%;
-    text-overflow: ellipsis !important;
-    line-height: 16px;
+  justify-content: space-between;
+  .card-tag {
+    display: flex;
+    column-gap: 5px;
+    .card-tag--salary,
+    .card-tag--address {
+      display: inline-block;
+      padding: 4px 8px;
+      color: #000;
+      background-color: #f3f5f7 !important;
+      border-radius: 5%;
+      text-overflow: ellipsis !important;
+      line-height: 16px;
+    }
+  }
+
+  .edit-and-del {
+    .delete {
+      color: red;
+      cursor: pointer;
+    }
+    .edit {
+      margin-right: 10px;
+      color: orange;
+      cursor: pointer;
+    }
+  }
+}
+
+.job-footer {
+  .pagination {
+    justify-content: center !important;
   }
 }

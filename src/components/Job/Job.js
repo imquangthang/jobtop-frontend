@@ -1,19 +1,52 @@
 import { useEffect, useState } from "react";
 import "./Job.scss";
-import { fetchAllJob } from "../../services/jobService";
+import {
+  fetchAllJob,
+  getUserAccount,
+  deleteJob,
+} from "../../services/jobService";
 import ReactPaginate from "react-paginate";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import ModalJob from "./ModalJob";
+import { toast } from "react-toastify";
+import ModalDelete from "../ManageUsers/ModalDelete";
 
 const Job = (props) => {
+  //modal read job
   const location = useLocation();
   const [listJobs, setListJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
 
+  // modal update/create job
+  const [isShowModalJob, setIsShowModalJob] = useState(false);
+  const [actionModalJob, setActionModalJob] = useState("CREATE");
+  const [dataModalJob, setDataModalJob] = useState({});
+  // modal delete
+  const [isShowModalDelete, setIsShowModalDelete] = useState(false);
+  const [dataModal, setDataModal] = useState({});
+
+  const [userValid, setUserValid] = useState(false);
+
+  const checkUser = async () => {
+    let response = await getUserAccount();
+    if (response && response.EC === 0) {
+      let group = response.DT.groupWithRoles.name;
+      if (group === "Dev") {
+        setUserValid(true);
+      } else {
+        setUserValid(false);
+      }
+    } else {
+      setUserValid(false);
+    }
+  };
+
   useEffect(() => {
+    checkUser();
     fetchJob();
-  }, [currentPage]);
+  }, [currentPage, currentLimit]);
 
   const fetchJob = async () => {
     if (location.pathname === "/") {
@@ -31,6 +64,45 @@ const Job = (props) => {
   const handlePageClick = async (event) => {
     setCurrentPage(+event.selected + 1);
   };
+
+  const handleDeleteJob = async (job) => {
+    setDataModal(job);
+    setIsShowModalDelete(true);
+  };
+
+  const handleClose = () => {
+    setIsShowModalDelete(false);
+    setDataModal({});
+  };
+
+  const confirmDeleteUser = async () => {
+    let response = await deleteJob(dataModal);
+    console.log(">>Check response: ", response);
+    if (response && response.EC === 0) {
+      toast.success(response.EM);
+      await fetchJob();
+      setIsShowModalDelete(false);
+    } else {
+      toast.error(response.EM);
+    }
+  };
+
+  const onHideModalJob = async () => {
+    setIsShowModalJob(false);
+    setDataModalJob({});
+    await fetchJob();
+  };
+
+  const handleRefresh = async () => {
+    await fetchJob();
+  };
+
+  const handleEditJob = (user) => {
+    setActionModalJob("UPDATE");
+    setDataModalJob(user);
+    setIsShowModalJob(true);
+  };
+
   return (
     <>
       <div className="container mt-3">
@@ -103,6 +175,31 @@ const Job = (props) => {
             </div>
           </div>
         </div>
+        {location.pathname === "/job" && userValid ? (
+          <>
+            <div className="actions my-3">
+              <button
+                className="btn btn-success refresh me-1"
+                onClick={() => handleRefresh()}
+              >
+                <i class="fa fa-refresh me-1"></i>
+                Refresh
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  setIsShowModalJob(true);
+                  setActionModalJob("CREATE");
+                }}
+              >
+                <i class="fa fa-plus-circle me-1"></i>
+                Add New Job
+              </button>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
 
         <div
           className="row row-cols-1 row-cols-md-1 
@@ -135,6 +232,24 @@ const Job = (props) => {
                                   {item.address}
                                 </div>
                               </p>
+                              {userValid && location.pathname !== "/" && (
+                                <td className="edit-and-del">
+                                  <span
+                                    title="Edit"
+                                    className="edit"
+                                    onClick={() => handleEditJob(item)}
+                                  >
+                                    <i className="fa fa-pencil"></i>
+                                  </span>
+                                  <span
+                                    title="Delete"
+                                    className="delete"
+                                    onClick={() => handleDeleteJob(item)}
+                                  >
+                                    <i class="fa fa-trash"></i>
+                                  </span>
+                                </td>
+                              )}
                             </small>
                           </div>
                         </div>
@@ -147,7 +262,7 @@ const Job = (props) => {
           ) : (
             <>
               <tr>
-                <td>Not Found User</td>
+                <td>Not Found Jobs</td>
               </tr>
             </>
           )}
@@ -156,12 +271,12 @@ const Job = (props) => {
         {totalPages > 0 && (
           <div className="job-footer mt-3">
             <ReactPaginate
-              nextLabel="next >"
+              nextLabel=">"
               onPageChange={handlePageClick}
               pageRangeDisplayed={3}
               marginPagesDisplayed={2}
               pageCount={totalPages}
-              previousLabel="< previous"
+              previousLabel="<"
               pageClassName="page-item"
               pageLinkClassName="page-link"
               previousClassName="page-item"
@@ -177,6 +292,20 @@ const Job = (props) => {
             />
           </div>
         )}
+
+        <ModalDelete
+          show={isShowModalDelete}
+          handleClose={handleClose}
+          confirmDeleteUser={confirmDeleteUser}
+          dataModal={dataModal}
+        />
+
+        <ModalJob
+          show={isShowModalJob}
+          onHide={onHideModalJob}
+          action={actionModalJob}
+          dataModalJob={dataModalJob}
+        />
       </div>
     </>
   );
