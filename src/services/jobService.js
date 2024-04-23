@@ -1,7 +1,15 @@
 import axios from "../setup/axios";
 
-const fetchAllJob = (page, limit) => {
-  return axios.get(`/api/v1/job/read?page=${page}&limit=${limit}`);
+const fetchAllJob = (page, limit, jobQuery) => {
+  return axios.get(
+    `/api/v1/job/read?page=${page}&limit=${limit}&title=${jobQuery.title}&address=${jobQuery.address}&salary=${jobQuery.salary}&experience=${jobQuery.experience}`
+  );
+};
+
+const fetchAllCompanyJob = (page, limit, email, jobQuery) => {
+  return axios.get(
+    `/api/v1/job/read/company-job?page=${page}&limit=${limit}&title=${jobQuery.title}&address=${jobQuery.address}&salary=${jobQuery.salary}&experience=${jobQuery.experience}&email=${email}`
+  );
 };
 
 const createNewJob = (jobData) => {
@@ -16,20 +24,37 @@ const updateCurrentJob = (jobData) => {
   });
 };
 
-const getUserAccount = () => {
-  return axios.get("/api/v1/account");
-};
-
 const deleteJob = (job) => {
   return axios.delete("/api/v1/job/delete", {
     data: { id: job.id },
   });
 };
 
+const getListAddress = () => {
+  return axios.get("/api/v1/job/read/getAddress");
+};
+
+const getListCareer = () => {
+  return axios.get("/api/v1/job/read/getCareer");
+};
+
+const getJobInfo = (id) => {
+  return axios.get(`/api/v1/job/read/job-info?id=${id}`);
+};
+
+const addNewCareer = (careerData) => {
+  return axios.post("/api/v1/job/create/create-new-career", { ...careerData });
+};
+
+
 export {
   fetchAllJob,
   updateCurrentJob,
   createNewJob,
-  getUserAccount,
   deleteJob,
+  getListAddress,
+  fetchAllCompanyJob,
+  getJobInfo,
+  getListCareer,
+  addNewCareer,
 };

@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import "./Job.scss";
 import {
   fetchAllJob,
-  getUserAccount,
   deleteJob,
+  getListAddress,
 } from "../../services/jobService";
+import { getUserAccount } from "../../services/userService";
 import ReactPaginate from "react-paginate";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import { Link, useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import ModalJob from "./ModalJob";
 import { toast } from "react-toastify";
-import ModalDelete from "../ManageUsers/ModalDelete";
+import ModalDelete from "./ModalDelete";
+import _ from "lodash";
 
 const Job = (props) => {
   //modal read job
@@ -18,6 +20,15 @@ const Job = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
+  const defaultJobQuery = {
+    title: "",
+    address: "",
+    experience: "",
+    salary: "",
+  };
+  const [jobQuery, setJobQuery] = useState(defaultJobQuery);
+
+  const [listAddress, setListAddress] = useState({});
 
   // modal update/create job
   const [isShowModalJob, setIsShowModalJob] = useState(false);
@@ -44,6 +55,7 @@ const Job = (props) => {
   };
 
   useEffect(() => {
+    handleGetAddress();
     checkUser();
     fetchJob();
   }, [currentPage, currentLimit]);
@@ -52,7 +64,7 @@ const Job = (props) => {
     if (location.pathname === "/") {
       setCurrentLimit(3);
     }
-    let response = await fetchAllJob(currentPage, currentLimit);
+    let response = await fetchAllJob(currentPage, currentLimit, jobQuery);
 
     if (response && response.EC === 0) {
       console.log(response.DT);
@@ -93,21 +105,34 @@ const Job = (props) => {
     await fetchJob();
   };
 
-  const handleRefresh = async () => {
-    await fetchJob();
+  const handleEditJob = (job) => {
+    setActionModalJob("UPDATE");
+    setDataModalJob(job);
+    setIsShowModalJob(true);
   };
 
-  const handleEditJob = (user) => {
-    setActionModalJob("UPDATE");
-    setDataModalJob(user);
-    setIsShowModalJob(true);
+  const handleOnChangeQuery = (value, name) => {
+    let _JobQuery = _.cloneDeep(jobQuery);
+    _JobQuery[name] = value;
+    setJobQuery(_JobQuery);
+  };
+
+  const handleQuery = () => {
+    fetchJob();
+  };
+
+  const handleGetAddress = async () => {
+    let dataAddress = await getListAddress();
+    if (dataAddress && dataAddress.EC === 0) {
+      setListAddress(dataAddress.DT);
+    }
   };
 
   return (
     <>
       <div className="container mt-3">
         <div class="input-group mb-3">
-          <span class="input-group-text">
+          <span class="input-group-text" onClick={() => handleQuery()}>
             <i class="fa fa-search"></i>
           </span>
           <input
@@ -115,7 +140,10 @@ const Job = (props) => {
             id="keywordInput"
             class="form-control"
             placeholder="Tìm công việc"
-            onkeypress="searchOnEnter(event)"
+            value={jobQuery.title}
+            onChange={(event) =>
+              handleOnChangeQuery(event.target.value, "title")
+            }
           />
         </div>
 
@@ -128,14 +156,22 @@ const Job = (props) => {
               <select
                 id="locationFilter"
                 class="form-select"
-                onchange="handleLocationFilter()"
+                onChange={(event) =>
+                  handleOnChangeQuery(event.target.value, "address")
+                }
               >
                 <option value="">Tất Cả</option>
-                <option value="Hà Nội, Việt Nam">Hà Nội, Việt Nam</option>
-                <option value="TP. Hồ Chí Minh, Việt Nam">
-                  TP. Hồ Chí Minh, Việt Nam
-                </option>
-                <option value="Đà Nẵng, Việt Nam">Đà Nẵng, Việt Nam</option>
+                {listAddress && listAddress.length > 0 ? (
+                  <>
+                    {listAddress.map((item, index) => {
+                      return (
+                        <option value={item.address}>{item.address}</option>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
               </select>
             </div>
             <div class="col-lg-4 col-md-6">
@@ -145,11 +181,13 @@ const Job = (props) => {
               <select
                 id="salaryFilter"
                 class="form-select"
-                onchange="handleSalaryFilter()"
+                onChange={(event) =>
+                  handleOnChangeQuery(event.target.value, "salary")
+                }
               >
                 <option value="">Tất Cả</option>
-                <option value="Tăng dần">Tăng dần</option>
-                <option value="Giảm dần">Giảm dần</option>
+                <option value="ASC">Tăng dần</option>
+                <option value="DESC">Giảm dần</option>
               </select>
             </div>
             <div class="col-lg-4 col-md-6">
@@ -159,47 +197,24 @@ const Job = (props) => {
               <select
                 id="experienceFilter"
                 class="form-select"
-                onchange="handleExperienceFilter()"
+                onChange={(event) =>
+                  handleOnChangeQuery(event.target.value, "experience")
+                }
               >
                 <option value="">Tất Cả</option>
                 <option value="Chưa có kinh nghiệm">Chưa có kinh nghiệm</option>
-                <option value="Dưới 1 năm">Dưới 1 năm</option>
-                <option value="Từ 1 đến 2 năm">Từ 1 đến 2 năm</option>
-                <option value="Trên 2 năm">Trên 2 năm</option>
+                <option value="1">Dưới 1 năm</option>
+                <option value="1 2 ">Từ 1 đến 2 năm</option>
+                <option value="2 ">Trên 2 năm</option>
               </select>
             </div>
             <div class="col-lg-12 mt-3">
-              <button class="btn btn-primary" onclick="filterJobs()">
+              <button class="btn btn-primary" onClick={() => handleQuery()}>
                 Tìm Kiếm
               </button>
             </div>
           </div>
         </div>
-        {location.pathname === "/job" && userValid ? (
-          <>
-            <div className="actions my-3">
-              <button
-                className="btn btn-success refresh me-1"
-                onClick={() => handleRefresh()}
-              >
-                <i class="fa fa-refresh me-1"></i>
-                Refresh
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  setIsShowModalJob(true);
-                  setActionModalJob("CREATE");
-                }}
-              >
-                <i class="fa fa-plus-circle me-1"></i>
-                Add New Job
-              </button>
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
 
         <div
           className="row row-cols-1 row-cols-md-1 
@@ -221,35 +236,45 @@ const Job = (props) => {
                         </div>
                         <div className="col-md-9">
                           <div className="card-body">
-                            <h5 className="card-title">{item.title}</h5>
-                            <p className="card-text">{item.description}</p>
+                            <Link
+                              className="card-info"
+                              to={`/job-info/${item.id}`}
+                            >
+                              <h5 className="card-title">{item.title}</h5>
+                            </Link>
+                            <p className="card-text">
+                              {item.Company && item.Company.name
+                                ? item.Company.name
+                                : "no name"}
+                            </p>
                             <small className="text-muted">
                               <p className="card-tag">
                                 <div className="card-tag--salary text_ellipsis">
-                                  {item.salary}
+                                  <span>{item.salary}</span>
                                 </div>
                                 <div className="card-tag--address text_ellipsis">
-                                  {item.address}
+                                  <span>{item.address}</span>
                                 </div>
                               </p>
-                              {userValid && location.pathname !== "/" && (
-                                <td className="edit-and-del">
-                                  <span
-                                    title="Edit"
-                                    className="edit"
-                                    onClick={() => handleEditJob(item)}
-                                  >
-                                    <i className="fa fa-pencil"></i>
-                                  </span>
-                                  <span
-                                    title="Delete"
-                                    className="delete"
-                                    onClick={() => handleDeleteJob(item)}
-                                  >
-                                    <i class="fa fa-trash"></i>
-                                  </span>
-                                </td>
-                              )}
+                              {userValid &&
+                                location.pathname === "/edit-jobs" && (
+                                  <td className="edit-and-del">
+                                    <span
+                                      title="Edit"
+                                      className="edit"
+                                      onClick={() => handleEditJob(item)}
+                                    >
+                                      <i className="fa fa-pencil"></i>
+                                    </span>
+                                    <span
+                                      title="Delete"
+                                      className="delete"
+                                      onClick={() => handleDeleteJob(item)}
+                                    >
+                                      <i class="fa fa-trash"></i>
+                                    </span>
+                                  </td>
+                                )}
                             </small>
                           </div>
                         </div>

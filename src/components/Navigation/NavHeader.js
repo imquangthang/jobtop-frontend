@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./NavHeader.scss";
 import {
   Link,
@@ -12,10 +12,8 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../../logo.png";
-import { logoutUser } from "../../services/userService";
+import { getUserAccount, logoutUser } from "../../services/userService";
 import { toast } from "react-toastify";
-import { dropRight } from "lodash";
-import { Dropdown } from "bootstrap";
 
 const NavHeader = (props) => {
   const { user, logoutContext } = useContext(UserContext);
@@ -33,6 +31,21 @@ const NavHeader = (props) => {
       toast.error(data.EM);
     }
   };
+
+  const [userValid, setUserValid] = useState("");
+  const checkUser = async () => {
+    let response = await getUserAccount();
+    if (response && response.EC === 0) {
+      let group = response.DT.groupWithRoles.name;
+      setUserValid(group);
+    } else {
+      setUserValid("");
+    }
+  };
+
+  useEffect(() => {
+    checkUser();
+  }, [userValid]);
 
   if ((user && user.isAuthenticated === true) || location.pathname === "/") {
     return (
@@ -91,30 +104,68 @@ const NavHeader = (props) => {
                         </NavLink>
                       </div>
                     </div>
-                    <div className="dropdown">
-                      <a
-                        className={
-                          location.pathname === "/accounts" ||
-                          location.pathname === "/roles" ||
-                          location.pathname === "/group-role"
-                            ? "nav-link active"
-                            : "nav-link"
-                        }
-                      >
-                        Edit
-                      </a>
-                      <div className="dropdown-content">
-                        <NavLink to="/accounts" className="nav-link">
-                          Account
-                        </NavLink>
-                        <NavLink to="/roles" className="nav-link">
-                          Roles
-                        </NavLink>
-                        <NavLink to="/group-role" className="nav-link">
-                          Group-Role
-                        </NavLink>
-                      </div>
-                    </div>
+                    {userValid === "Dev" ? (
+                      <>
+                        <div className="dropdown">
+                          <a
+                            className={
+                              location.pathname === "/accounts" ||
+                              location.pathname === "/roles" ||
+                              location.pathname === "/group-role"
+                                ? "nav-link active"
+                                : "nav-link"
+                            }
+                          >
+                            Edit
+                          </a>
+                          <div className="dropdown-content">
+                            <NavLink to="/accounts" className="nav-link">
+                              Account
+                            </NavLink>
+                            <NavLink to="/roles" className="nav-link">
+                              Roles
+                            </NavLink>
+                            <NavLink to="/group-role" className="nav-link">
+                              Group-Role
+                            </NavLink>
+                            <NavLink to="/edit-jobs" className="nav-link">
+                              Edit Jobs
+                            </NavLink>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                    {userValid === "Dev" ? (
+                      <>
+                        <div className="dropdown">
+                          <a
+                            className={
+                              location.pathname === "/company-jobs" ||
+                              location.pathname === "/check-status-jobs"
+                                ? "nav-link active"
+                                : "nav-link"
+                            }
+                          >
+                            Company
+                          </a>
+                          <div className="dropdown-content">
+                            <NavLink to="/company-jobs" className="nav-link">
+                              Company jobs
+                            </NavLink>
+                            <NavLink
+                              to="/check-status-jobs"
+                              className="nav-link"
+                            >
+                              Check status jobs
+                            </NavLink>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </Nav>
                   <Nav>
                     {user && user.isAuthenticated === true ? (

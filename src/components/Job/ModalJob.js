@@ -1,12 +1,19 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { createNewJob, updateCurrentJob } from "../../services/jobService";
+import {
+  createNewJob,
+  updateCurrentJob,
+  getListCareer,
+} from "../../services/jobService";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import ModalNewCareer from "./ModalNewCareer";
 import _ from "lodash";
 
 const ModalJob = (props) => {
-  const { action, dataModalJob } = props;
+  const { action, dataModalJob, company } = props;
+  const [companyName, setCompanyName] = useState("");
+  const [listCareer, setListCareer] = useState({});
   const defaultJobData = {
     title: "",
     companyId: "",
@@ -15,7 +22,8 @@ const ModalJob = (props) => {
     numberEmployee: "",
     experience: "",
     level: "",
-    salary: "",
+    salary_min: "",
+    salary_max: "",
     education: "",
     description: "",
     requirements: "",
@@ -31,7 +39,8 @@ const ModalJob = (props) => {
     numberEmployee: true,
     experience: true,
     level: true,
-    salary: true,
+    salary_min: true,
+    salary_max: true,
     education: true,
     description: true,
     requirements: true,
@@ -42,19 +51,71 @@ const ModalJob = (props) => {
   const [JobData, setJobData] = useState(defaultJobData);
   const [validInputs, setValidInputs] = useState(validInputsDefault);
 
+  const [showCareerInput, setShowCareerInput] = useState(false);
+
   useEffect(() => {
     if (action === "UPDATE") {
-      setJobData(dataModalJob);
+      setJobData(createRealData());
     }
   }, [dataModalJob]);
 
   useEffect(() => {
     if (action === "CREATE") {
-      setJobData({ ...JobData });
+      setJobData(createRealData());
     }
   }, [action]);
 
+  const createRealData = () => {
+    let str = dataModalJob.salary;
+    let min, max;
+    if (str) {
+      let matches = str.match(/\d+/g); // Tìm tất cả các số trong chuỗi
+      min = parseInt(matches[0]); // Số nhỏ nhất
+      max = parseInt(matches[1]); // Số lớn nhất
+    }
+    let company_id;
+    if (action === "UPDATE") {
+      if (
+        dataModalJob.Company &&
+        dataModalJob.Company.id &&
+        dataModalJob.Company.name
+      ) {
+        company_id = dataModalJob.Company.id;
+        setCompanyName(dataModalJob.Company.name);
+      }
+    } else {
+      if (company && company.id && company.name) {
+        company_id = company.id;
+        setCompanyName(company.name);
+      }
+    }
+
+    let tmp_data = {
+      id: dataModalJob.id,
+      title: dataModalJob.title,
+      companyId: company_id,
+      careerId: dataModalJob.careerId,
+      address: dataModalJob.address,
+      numberEmployee: dataModalJob.numberEmployee,
+      experience: dataModalJob.experience,
+      level: dataModalJob.level,
+      salary_min: min,
+      salary_max: max,
+      education: dataModalJob.education,
+      description: dataModalJob.description,
+      requirements: dataModalJob.requirements,
+      deadline: dataModalJob.deadline,
+      sourcePicture: dataModalJob.sourcePicture,
+    };
+    return tmp_data;
+  };
+
   const handleOnChangeInput = (value, name) => {
+    if (value === "KHÁC") {
+      setShowCareerInput(true);
+    } else {
+      setShowCareerInput(false);
+    }
     let _JobData = _.cloneDeep(JobData);
     _JobData[name] = value;
     setJobData(_JobData);
@@ -66,13 +127,13 @@ const ModalJob = (props) => {
     setValidInputs(validInputsDefault);
     let arr = [
       "title",
-      "companyId",
       "careerId",
       "address",
       "numberEmployee",
       "experience",
       "level",
-      "salary",
+      "salary_min",
+      "salary_max",
       "education",
       "description",
       "requirements",
@@ -96,23 +157,40 @@ const ModalJob = (props) => {
   };
 
   const handleConfirmJob = async () => {
-    // create Job
+    // confirm Job
     let check = checkValidateInputs();
     if (check === true) {
+      let tmp_data = {
+        id: JobData.id,
+        title: JobData.title,
+        companyId: JobData.companyId,
+        careerId: JobData.careerId,
+        address: JobData.address,
+        numberEmployee: JobData.numberEmployee,
+        experience: JobData.experience,
+        level: JobData.level,
+        salary: JobData.salary_min + " - " + JobData.salary_max + " Triệu",
+        education: JobData.education,
+        description: JobData.description,
+        requirements: JobData.requirements,
+        deadline: JobData.deadline,
+        sourcePicture: JobData.sourcePicture,
+      };
+
       let res =
         action === "CREATE"
-          ? await createNewJob({ ...JobData })
-          : await updateCurrentJob({ ...JobData });
+          ? await createNewJob({ ...tmp_data })
+          : await updateCurrentJob({ ...tmp_data });
       if (res && res.EC === 0) {
         props.onHide();
         setJobData({ ...defaultJobData });
-        toast.success("UPDATE success");
+        toast.success(res.EM);
       } else {
         toast.error(res.EM);
         let _validInputs = _.cloneDeep(validInputsDefault);
         _validInputs[res.DT] = false;
         setValidInputs(_validInputs);
-        toast.error("UPDATE unsuccess");
+        toast.error(res.EM);
       }
     }
   };
@@ -121,6 +199,32 @@ const ModalJob = (props) => {
     props.onHide();
     setJobData(defaultJobData);
     setValidInputs(validInputsDefault);
+    setCompanyName("");
+  };
+
+  const fetchCareer = async () => {
+    let response = await getListCareer();
+    if (response && response.EC === 0) {
+      setListCareer(response.DT);
+    }
+  };
+
+  useEffect(() => {
+    fetchCareer();
+    console.log(dataModalJob);
+  }, [dataModalJob]);
+
+  const onHideModalNewCareer = async () => {
+    setShowCareerInput(false);
+    await fetchCareer();
+  };
+
+  const setId = (id) => {
+    console.log("New career id: " + id);
+    setJobData((JobData) => ({
+      ...JobData,
+      careerId: id,
+    }));
   };
 
   return (
@@ -128,8 +232,9 @@ const ModalJob = (props) => {
       <Modal
         size="lg"
         show={props.show}
-        className="modal-Job"
+        className="modal-job"
         onHide={() => handleCloseModalJob()}
+        backdrop="static"
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -155,35 +260,43 @@ const ModalJob = (props) => {
             </div>
 
             <div className="col-12 col-sm-6 form-group">
-              <label>Company Id:</label>
+              <label>Company Name:</label>
               <input
-                className={
-                  validInputs.companyId
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
+                disabled
+                className="form-control"
                 type="text"
-                value={JobData.companyId}
-                onChange={(event) =>
-                  handleOnChangeInput(event.target.value, "companyId")
-                }
+                value={companyName}
               />
             </div>
 
             <div className="col-12 col-sm-6 form-group">
-              <label>Career Id:</label>
-              <input
+              <label>Career Name:</label>
+              <select
                 className={
                   validInputs.careerId
-                    ? "form-control"
-                    : "form-control is-invalid"
+                    ? "form-select"
+                    : "form-select is-invalid"
                 }
-                type="text"
                 value={JobData.careerId}
                 onChange={(event) =>
                   handleOnChangeInput(event.target.value, "careerId")
                 }
-              />
+              >
+                {listCareer && listCareer.length > 0 ? (
+                  <>
+                    {listCareer.map((item, index) => {
+                      return (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <></>
+                )}
+                <option value="KHÁC">Khác</option>
+              </select>
             </div>
 
             <div className="col-12 col-sm-12 form-group">
@@ -250,18 +363,36 @@ const ModalJob = (props) => {
 
             <div className="col-12 col-sm-6 form-group">
               <label>Salary:</label>
-              <input
-                className={
-                  validInputs.salary
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
-                type="text"
-                value={JobData.salary}
-                onChange={(event) =>
-                  handleOnChangeInput(event.target.value, "salary")
-                }
-              />
+              <div className="d-flex align-items-center">
+                <input
+                  className={
+                    validInputs.salary_min
+                      ? "form-control"
+                      : "form-control is-invalid"
+                  }
+                  type="number"
+                  placeholder="Từ"
+                  value={JobData.salary_min}
+                  onChange={(event) =>
+                    handleOnChangeInput(event.target.value, "salary_min")
+                  }
+                />
+                <span className="mx-3">-</span>
+                <input
+                  className={
+                    validInputs.salary_max
+                      ? "form-control"
+                      : "form-control is-invalid"
+                  }
+                  type="number"
+                  placeholder="Đến"
+                  value={JobData.salary_max}
+                  onChange={(event) =>
+                    handleOnChangeInput(event.target.value, "salary_max")
+                  }
+                />
+                <span className="mx-3">Triệu</span>
+              </div>
             </div>
 
             <div className="col-12 col-sm-4 form-group">
@@ -354,6 +485,14 @@ const ModalJob = (props) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {showCareerInput && (
+        <ModalNewCareer
+          show={true}
+          onHide={onHideModalNewCareer}
+          setId={setId}
+        />
+      )}
     </>
   );
 };

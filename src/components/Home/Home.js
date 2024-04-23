@@ -2,6 +2,7 @@ import "./Home.scss";
 import Job from "../Job/Job";
 
 const Home = (props) => {
+  
   return (
     <>
       <div className="container">
@@ -98,8 +99,6 @@ const Home = (props) => {
             </div>
           </div>
         </div>
-
-
         <Job />
       </div>
     </>

@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import "./Users.scss";
-import { fetchAllUsers, deleteUser } from "../../services/userService";
+import {
+  fetchAllUsers,
+  deleteUser,
+  getUserAccount,
+} from "../../services/userService";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
 import ModalDelete from "./ModalDelete";
@@ -19,7 +23,23 @@ const Users = (props) => {
   const [actionModalUser, setActionModalUser] = useState("CREATE");
   const [dataModalUser, setDataModalUser] = useState({});
 
+  const [userValid, setUserValid] = useState(false);
+  const checkUser = async () => {
+    let response = await getUserAccount();
+    if (response && response.EC === 0) {
+      let group = response.DT.groupWithRoles.name;
+      if (group === "Dev") {
+        setUserValid(true);
+      } else {
+        setUserValid(false);
+      }
+    } else {
+      setUserValid(false);
+    }
+  };
+
   useEffect(() => {
+    checkUser();
     fetchUsers();
   }, [currentPage]);
 
@@ -77,127 +97,133 @@ const Users = (props) => {
 
   return (
     <>
-      <div className="container">
-        <div className="manage-user-container">
-          <div className="user-header">
-            <div className="title mt-3">
-              <h3>Manage Users</h3>
-            </div>
-            <div className="actions my-3">
-              <button
-                className="btn btn-success refresh"
-                onClick={() => handleRefresh()}
-              >
-                <i class="fa fa-refresh"></i>
-                Refresh
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  setIsShowModalUser(true);
-                  setActionModalUser("CREATE");
-                }}
-              >
-                <i class="fa fa-plus-circle"></i>
-                Add New User
-              </button>
-            </div>
-          </div>
-          <div className="user-body">
-            <table className="table table-bordered table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Id</th>
-                  <th scope="col">Email</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">Group</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {listUsers && listUsers.length > 0 ? (
-                  <>
-                    {listUsers.map((item, index) => {
-                      return (
-                        <tr key={`row-${index}`}>
-                          <td>
-                            {(currentPage - 1) * currentLimit + index + 1}
-                          </td>
-                          <td>{item.id}</td>
-                          <td>{item.email}</td>
-                          <td>{item.username}</td>
-                          <td>{item.Group ? item.Group.name : ""}</td>
-                          <td>
-                            <span
-                              title="Edit"
-                              className="edit"
-                              onClick={() => handleEditUser(item)}
-                            >
-                              <i className="fa fa-pencil"></i>
-                            </span>
-                            <span
-                              title="Delete"
-                              className="delete"
-                              onClick={() => handleDeleteUser(item)}
-                            >
-                              <i class="fa fa-trash"></i>
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </>
-                ) : (
-                  <>
+      {userValid ? (
+        <>
+          <div className="container">
+            <div className="manage-user-container">
+              <div className="user-header">
+                <div className="title mt-3">
+                  <h3>Manage Users</h3>
+                </div>
+                <div className="actions my-3">
+                  <button
+                    className="btn btn-success refresh"
+                    onClick={() => handleRefresh()}
+                  >
+                    <i class="fa fa-refresh"></i>
+                    Refresh
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      setIsShowModalUser(true);
+                      setActionModalUser("CREATE");
+                    }}
+                  >
+                    <i class="fa fa-plus-circle"></i>
+                    Add New User
+                  </button>
+                </div>
+              </div>
+              <div className="user-body">
+                <table className="table table-bordered table-hover">
+                  <thead>
                     <tr>
-                      <td>Not Found User</td>
+                      <th scope="col">#</th>
+                      <th scope="col">Id</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">Group</th>
+                      <th scope="col">Actions</th>
                     </tr>
-                  </>
-                )}
-              </tbody>
-            </table>
-          </div>
-          {totalPages > 0 && (
-            <div className="user-footer">
-              <ReactPaginate
-                nextLabel="next >"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={3}
-                marginPagesDisplayed={2}
-                pageCount={totalPages}
-                previousLabel="< previous"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                breakLabel="..."
-                breakClassName="page-item"
-                breakLinkClassName="page-link"
-                containerClassName="pagination"
-                activeClassName="active"
-                renderOnZeroPageCount={null}
-              />
+                  </thead>
+                  <tbody>
+                    {listUsers && listUsers.length > 0 ? (
+                      <>
+                        {listUsers.map((item, index) => {
+                          return (
+                            <tr key={`row-${index}`}>
+                              <td>
+                                {(currentPage - 1) * currentLimit + index + 1}
+                              </td>
+                              <td>{item.id}</td>
+                              <td>{item.email}</td>
+                              <td>{item.username}</td>
+                              <td>{item.Group ? item.Group.name : ""}</td>
+                              <td>
+                                <span
+                                  title="Edit"
+                                  className="edit"
+                                  onClick={() => handleEditUser(item)}
+                                >
+                                  <i className="fa fa-pencil"></i>
+                                </span>
+                                <span
+                                  title="Delete"
+                                  className="delete"
+                                  onClick={() => handleDeleteUser(item)}
+                                >
+                                  <i class="fa fa-trash"></i>
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      <>
+                        <tr>
+                          <td>Not Found User</td>
+                        </tr>
+                      </>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              {totalPages > 0 && (
+                <div className="user-footer">
+                  <ReactPaginate
+                    nextLabel="next >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    marginPagesDisplayed={2}
+                    pageCount={totalPages}
+                    previousLabel="< previous"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakLabel="..."
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    activeClassName="active"
+                    renderOnZeroPageCount={null}
+                  />
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
+          </div>
 
-      <ModalDelete
-        show={isShowModalDelete}
-        handleClose={handleClose}
-        confirmDeleteUser={confirmDeleteUser}
-        dataModal={dataModal}
-      />
+          <ModalDelete
+            show={isShowModalDelete}
+            handleClose={handleClose}
+            confirmDeleteUser={confirmDeleteUser}
+            dataModal={dataModal}
+          />
 
-      <ModalUser
-        show={isShowModalUser}
-        onHide={onHideModalUser}
-        action={actionModalUser}
-        dataModalUser={dataModalUser}
-      />
+          <ModalUser
+            show={isShowModalUser}
+            onHide={onHideModalUser}
+            action={actionModalUser}
+            dataModalUser={dataModalUser}
+          />
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
