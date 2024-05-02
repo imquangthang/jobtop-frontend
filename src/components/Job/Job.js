@@ -44,7 +44,7 @@ const Job = (props) => {
     let response = await getUserAccount();
     if (response && response.EC === 0) {
       let group = response.DT.groupWithRoles.name;
-      if (group === "Dev") {
+      if (group === "Admin" || group === "Customer") {
         setUserValid(true);
       } else {
         setUserValid(false);
@@ -55,15 +55,15 @@ const Job = (props) => {
   };
 
   useEffect(() => {
+    if (location.pathname === "/") {
+      setCurrentLimit(6);
+    }
     handleGetAddress();
     checkUser();
     fetchJob();
   }, [currentPage, currentLimit]);
 
   const fetchJob = async () => {
-    if (location.pathname === "/") {
-      setCurrentLimit(3);
-    }
     let response = await fetchAllJob(currentPage, currentLimit, jobQuery);
 
     if (response && response.EC === 0) {
@@ -216,10 +216,7 @@ const Job = (props) => {
           </div>
         </div>
 
-        <div
-          className="row row-cols-1 row-cols-md-1 
-              row-cols-lg-3 g-3"
-        >
+        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
           {listJobs && listJobs.length > 0 ? (
             <>
               {listJobs.map((item, index) => {
@@ -227,13 +224,19 @@ const Job = (props) => {
                   <div className="col">
                     <div className="card mb-0">
                       <div className="row g-0">
-                        <div className="col-md-3 text-center">
-                          <img
-                            src={item.sourcePicture}
-                            className="img-fluid rounded-start"
-                            alt="..."
-                          ></img>
+                        <div className="col-md-3 text-center d-block">
+                          <Link
+                            className="card-info"
+                            to={`/job-info/${item.id}`}
+                          >
+                            <img
+                              src={item.sourcePicture}
+                              className="img-fluid rounded-start"
+                              alt="..."
+                            ></img>
+                          </Link>
                         </div>
+
                         <div className="col-md-9">
                           <div className="card-body">
                             <Link
@@ -241,12 +244,13 @@ const Job = (props) => {
                               to={`/job-info/${item.id}`}
                             >
                               <h5 className="card-title">{item.title}</h5>
+
+                              <p className="card-text">
+                                {item.Company && item.Company.name
+                                  ? item.Company.name
+                                  : "no name"}
+                              </p>
                             </Link>
-                            <p className="card-text">
-                              {item.Company && item.Company.name
-                                ? item.Company.name
-                                : "no name"}
-                            </p>
                             <small className="text-muted">
                               <p className="card-tag">
                                 <div className="card-tag--salary text_ellipsis">

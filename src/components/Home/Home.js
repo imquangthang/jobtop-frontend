@@ -2,7 +2,6 @@ import "./Home.scss";
 import Job from "../Job/Job";
 
 const Home = (props) => {
-  
   return (
     <>
       <div className="container">
@@ -38,25 +37,22 @@ const Home = (props) => {
               <div className="carousel-item active">
                 <img
                   src="https://www.pace.edu.vn/uploads/news/2023/12/5-cac-yeu-to-trong-moi-truong-vi-mo.jpg"
-                  className="d-block w-100"
+                  className="h-100 w-100"
                   alt="..."
-                  height={400}
                 />
               </div>
-              <div className="carousel-item">
+              <div className="carousel-item ">
                 <img
                   src="https://www.pace.edu.vn/uploads/news/2023/12/1-moi-truong-vi-mo-la-gi.jpg"
-                  className="d-block w-100"
+                  className="h-100 w-100"
                   alt="..."
-                  height={400}
                 />
               </div>
               <div className="carousel-item">
                 <img
                   src="https://www.pace.edu.vn/uploads/news/2023/12/3-tac-dong-cua-moi-truong-vi-mo.jpg"
-                  className="d-block w-100"
+                  className="h-100 w-100"
                   alt="..."
-                  height={400}
                 />
               </div>
             </div>
@@ -100,6 +96,14 @@ const Home = (props) => {
           </div>
         </div>
         <Job />
+        {/* <div>
+          <iframe
+            src="https://drive.google.com/file/d/1ORThHlO3MWJ3I-o3ofKw2zB6Syf_tEQC/preview"
+            width="640"
+            height="480"
+            allow="autoplay"
+          ></iframe>
+        </div> */}
       </div>
     </>
   );

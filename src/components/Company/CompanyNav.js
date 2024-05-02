@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import "./NavHeader.scss";
+import "./CompanyNav.scss";
 import {
-  Link,
   NavLink,
   useLocation,
   useHistory,
@@ -15,7 +14,7 @@ import logo from "../../logo.png";
 import { getUserAccount, logoutUser } from "../../services/userService";
 import { toast } from "react-toastify";
 
-const NavHeader = (props) => {
+const CompanyNav = (props) => {
   const { user, logoutContext } = useContext(UserContext);
   const location = useLocation();
   const history = useHistory();
@@ -49,7 +48,7 @@ const NavHeader = (props) => {
 
   if (
     (user && user.isAuthenticated === true) ||
-    location.pathname === "/" ||
+    location.pathname === "/company" ||
     /^\/job-info\/\d+$/.test(location.pathname)
   ) {
     return (
@@ -57,7 +56,7 @@ const NavHeader = (props) => {
         <div className="navbar-light bg-light">
           <div className="nav-header container">
             <Navbar expand="lg" className="bg-body-tertiary" bg="header">
-              <Navbar.Brand href="/">
+              <Navbar.Brand href="/company">
                 <h3 className="brand">
                   <img
                     src={logo}
@@ -66,48 +65,32 @@ const NavHeader = (props) => {
                     className="d-inline-block align-top mx-3"
                     alt="Logo"
                   />
-                  <span className="brand-name">JOBTOP</span>
+                  <span className="brand-name">Company</span>
                 </h3>
               </Navbar.Brand>
               <Container>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="me-auto">
-                    <NavLink to="/" exact className="nav-link">
-                      Home
+                    <NavLink to="/company-jobs" className="nav-link">
+                      Company jobs
                     </NavLink>
-                    <NavLink to="/job" className="nav-link">
-                      Việc làm
-                    </NavLink>
-                    <NavLink to="/cv-template" className="nav-link">
-                      CV
+                    <NavLink to="/company-jobs-status" className="nav-link">
+                      Check status jobs
                     </NavLink>
                   </Nav>
                   <Nav>
-                    {user && user.isAuthenticated === true ? (
-                      <>
-                        <Nav.Item className="nav-link welcome">
-                          WELCOME {user.account.username} !
-                        </Nav.Item>
+                    <Nav.Item className="nav-link welcome">
+                      WELCOME {user.account.username} !
+                    </Nav.Item>
 
-                        <NavDropdown title="Settings" id="basic-nav-dropdown">
-                          <NavDropdown.Item>Change Password</NavDropdown.Item>
-                          <NavDropdown.Divider />
-                          <NavDropdown.Item>
-                            <span onClick={() => handleLogout()}>Log out</span>
-                          </NavDropdown.Item>
-                        </NavDropdown>
-                      </>
-                    ) : (
-                      <Link className="nav-link" to="/login">
-                        <button
-                          className="btn btn-outline-info me-2 mb-1"
-                          type="button"
-                        >
-                          Đăng Nhập
-                        </button>
-                      </Link>
-                    )}
+                    <NavDropdown title="Settings" id="basic-nav-dropdown">
+                      <NavDropdown.Item>Change Password</NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item>
+                        <span onClick={() => handleLogout()}>Log out</span>
+                      </NavDropdown.Item>
+                    </NavDropdown>
                   </Nav>
                 </Navbar.Collapse>
               </Container>
@@ -121,4 +104,4 @@ const NavHeader = (props) => {
   }
 };
 
-export default NavHeader;
+export default CompanyNav;

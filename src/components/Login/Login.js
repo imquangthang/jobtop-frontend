@@ -60,7 +60,13 @@ const Login = (props) => {
 
       localStorage.setItem("jwt", token);
       loginContext(data);
-      history.push("/");
+      if (groupWithRoles.name === "Admin") {
+        history.push("/admin");
+      } else if (groupWithRoles.name === "Customer") {
+        history.push("/company");
+      } else {
+        history.push("/");
+      }
     }
 
     if (response && +response.EC !== 0) {

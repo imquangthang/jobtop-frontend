@@ -46,6 +46,13 @@ const addNewCareer = (careerData) => {
   return axios.post("/api/v1/job/create/create-new-career", { ...careerData });
 };
 
+const applyJob = (formData) => {
+  return axios.post("/api/v1/job/apply-job", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
 export {
   fetchAllJob,
@@ -57,4 +64,5 @@ export {
   getJobInfo,
   getListCareer,
   addNewCareer,
+  applyJob,
 };

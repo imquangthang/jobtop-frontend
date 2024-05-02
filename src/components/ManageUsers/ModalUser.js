@@ -102,7 +102,7 @@ const ModalUser = (props) => {
     let check = checkValidateInputs();
     if (check === true) {
       let res =
-        action === "Create"
+        action === "CREATE"
           ? await createNewUser({
               ...userData,
               groupId: userData["group"],
@@ -145,7 +145,7 @@ const ModalUser = (props) => {
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
             <span>
-              {props.action === "CREATE" ? "Create new user" : "Edit a user"}
+              {props.action === "CREATE" ? "CREATE new user" : "Edit a user"}
             </span>
           </Modal.Title>
         </Modal.Header>

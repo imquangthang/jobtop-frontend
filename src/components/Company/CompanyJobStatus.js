@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react";
-import "./Job.scss";
+import "../Job/Job.scss";
 import {
   fetchAllCompanyJob,
-  deleteJob,
   getListAddress,
 } from "../../services/jobService";
 import { getUserAccount } from "../../services/userService";
 import ReactPaginate from "react-paginate";
-import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
-import ModalJob from "./ModalJob";
-import { toast } from "react-toastify";
-import ModalDelete from "./ModalDelete";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+
 import _ from "lodash";
 
 const CompanyJob = (props) => {
   //modal read job
-  const location = useLocation();
   const [listJobs, setListJobs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [currentLimit, setCurrentLimit] = useState(12);
@@ -30,23 +26,14 @@ const CompanyJob = (props) => {
 
   const [listAddress, setListAddress] = useState({});
 
-  // modal update/create job
-  const [isShowModalJob, setIsShowModalJob] = useState(false);
-  const [actionModalJob, setActionModalJob] = useState("");
-  const [dataModalJob, setDataModalJob] = useState({});
-  // modal delete
-  const [isShowModalDelete, setIsShowModalDelete] = useState(false);
-  const [dataModal, setDataModal] = useState({});
-
   const [userValid, setUserValid] = useState(false);
   const [userValidEmail, setUserValidEmail] = useState("");
-  const [company, setCompany] = useState({});
 
   const checkUser = async () => {
     let response = await getUserAccount();
     if (response && response.EC === 0) {
       let group = response.DT.groupWithRoles.name;
-      if (group === "Dev") {
+      if (group === "Customer") {
         setUserValid(true);
         setUserValidEmail(response.DT.email);
       } else {
@@ -76,53 +63,11 @@ const CompanyJob = (props) => {
     if (response && response.EC === 0) {
       setListJobs(response.DT.jobs);
       setTotalPages(response.DT.totalPages);
-      setCompany(response.DT.jobs[0].Company);
     }
   };
-  // useEffect(() => {
-  //   console.log(company);
-  // }, [company]);
 
   const handlePageClick = async (event) => {
     setCurrentPage(+event.selected + 1);
-  };
-
-  const handleDeleteJob = async (job) => {
-    setDataModal(job);
-    setIsShowModalDelete(true);
-  };
-
-  const handleClose = () => {
-    setIsShowModalDelete(false);
-    setDataModal({});
-  };
-
-  const confirmDeleteUser = async () => {
-    let response = await deleteJob(dataModal);
-    console.log(">>Check response: ", response);
-    if (response && response.EC === 0) {
-      toast.success(response.EM);
-      await fetchCompanyJob();
-      setIsShowModalDelete(false);
-    } else {
-      toast.error(response.EM);
-    }
-  };
-
-  const onHideModalJob = async () => {
-    setIsShowModalJob(false);
-    setDataModalJob({});
-    await fetchCompanyJob();
-  };
-
-  const handleRefresh = async () => {
-    await fetchCompanyJob();
-  };
-
-  const handleEditJob = (job) => {
-    setActionModalJob("UPDATE");
-    setDataModalJob(job);
-    setIsShowModalJob(true);
   };
 
   const handleOnChangeQuery = (value, name) => {
@@ -236,28 +181,6 @@ const CompanyJob = (props) => {
             </div>
           </div>
 
-          <>
-            <div className="actions my-3">
-              <button
-                className="btn btn-success refresh me-1"
-                onClick={() => handleRefresh()}
-              >
-                <i className="fa fa-refresh me-1"></i>
-                Refresh
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  setIsShowModalJob(true);
-                  setActionModalJob("CREATE");
-                }}
-              >
-                <i className="fa fa-plus-circle me-1"></i>
-                Add New Job
-              </button>
-            </div>
-          </>
-
           <div
             className="row row-cols-1 row-cols-md-1 
               row-cols-lg-3 g-3"
@@ -270,16 +193,26 @@ const CompanyJob = (props) => {
                       <div className="card mb-0">
                         <div className="row g-0">
                           <div className="col-md-3 text-center">
-                            <img
-                              src={item.sourcePicture}
-                              className="img-fluid rounded-start"
-                              alt="..."
-                            ></img>
+                            <Link
+                              className="card-info"
+                              to={`/job-info-status/${item.id}`}
+                            >
+                              <img
+                                src={item.sourcePicture}
+                                className="img-fluid rounded-start"
+                                alt="..."
+                              ></img>
+                            </Link>
                           </div>
                           <div className="col-md-9">
                             <div className="card-body">
-                              <h5 className="card-title">{item.title}</h5>
-                              <p className="card-text">{item.Company.name}</p>
+                              <Link
+                                className="card-info"
+                                to={`/job-info-status/${item.id}`}
+                              >
+                                <h5 className="card-title">{item.title}</h5>
+                                <p className="card-text">{item.Company.name}</p>
+                              </Link>
                               <small className="text-muted">
                                 <p className="card-tag">
                                   <div className="card-tag--salary text_ellipsis">
@@ -289,24 +222,6 @@ const CompanyJob = (props) => {
                                     <span>{item.address}</span>
                                   </div>
                                 </p>
-                                {userValid && location.pathname !== "/" && (
-                                  <td className="edit-and-del">
-                                    <span
-                                      title="Edit"
-                                      className="edit"
-                                      onClick={() => handleEditJob(item)}
-                                    >
-                                      <i className="fa fa-pencil"></i>
-                                    </span>
-                                    <span
-                                      title="Delete"
-                                      className="delete"
-                                      onClick={() => handleDeleteJob(item)}
-                                    >
-                                      <i className="fa fa-trash"></i>
-                                    </span>
-                                  </td>
-                                )}
                               </small>
                             </div>
                           </div>
@@ -349,21 +264,6 @@ const CompanyJob = (props) => {
               />
             </div>
           )}
-
-          <ModalDelete
-            show={isShowModalDelete}
-            handleClose={handleClose}
-            confirmDeleteUser={confirmDeleteUser}
-            dataModal={dataModal}
-          />
-
-          <ModalJob
-            show={isShowModalJob}
-            onHide={onHideModalJob}
-            action={actionModalJob}
-            dataModalJob={dataModalJob}
-            company={company}
-          />
         </div>
       ) : (
         <></>
