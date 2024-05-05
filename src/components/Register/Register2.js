@@ -101,17 +101,19 @@ const Register2 = (props) => {
                 <div class="card">
                   <div class="card-body">
                     <div class="border p-4 rounded">
-                      <div class="text-center">
-                        <img
-                          src={logo}
-                          width="30"
-                          height="30"
-                          className="d-inline-block align-top me-3"
-                          alt="Logo"
-                        />
-                        <h3 class="">Register</h3>
-                      </div>
-                      <p>
+                      <Link to="/">
+                        <div class="text-center">
+                          <img
+                            src={logo}
+                            width="30"
+                            height="30"
+                            className="d-inline-block align-top me-3"
+                            alt="Logo"
+                          />
+                          <h3 class="">Register</h3>
+                        </div>
+                      </Link>
+                      <p className="gap-1">
                         Already have an account?
                         <Link to="/login">Login here</Link>
                       </p>

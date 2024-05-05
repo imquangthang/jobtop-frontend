@@ -92,12 +92,12 @@ const JobInfo = (props) => {
           {applying ? (
             <div className="loading-container">
               <Rings
-                heigth="100"
+                height="100"
                 width="100"
                 color="#1877f2"
                 ariaLabel="loading"
               />
-              <div>Loading data...</div>
+              <div>Waiting...</div>
             </div>
           ) : (
             <>

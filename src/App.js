@@ -29,7 +29,7 @@ const App = () => {
         {user && user.isLoading ? (
           <div className="loading-container">
             <Rings
-              heigth="100"
+              height="100"
               width="100"
               color="#1877f2"
               ariaLabel="loading"

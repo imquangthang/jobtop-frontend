@@ -79,9 +79,6 @@ const CompanyJob = (props) => {
       setCompany(response.DT.jobs[0].Company);
     }
   };
-  // useEffect(() => {
-  //   console.log(company);
-  // }, [company]);
 
   const handlePageClick = async (event) => {
     setCurrentPage(+event.selected + 1);

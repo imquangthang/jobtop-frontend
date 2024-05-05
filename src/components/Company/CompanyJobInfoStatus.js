@@ -4,12 +4,26 @@ import { getUserApplyJob } from "../../services/companyServive";
 import "./CompanyJobInfoStatus.scss";
 import { getUserAccount } from "../../services/userService";
 import { toast } from "react-toastify";
+import ReactPaginate from "react-paginate";
+import ModalViewCV from "./ModalViewCV";
 
 const CompanyJobInfoStatus = (props) => {
   let { id } = useParams();
   const [userApplyJob, setUserApplyJob] = useState({});
   const [userValid, setUserValid] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(15);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const [viewCV, setViewCV] = useState("");
+  const [viewCoverletter, setViewCoverLetter] = useState("");
+  const [idRecruitment, setIdRecruitment] = useState("");
+  const [statusRecrutment, setStatusRecrutment] = useState("");
+
+  const [isShowModalViewCV, setIsShowModalViewCV] = useState(false);
+
+  const [statusQuery, setStatusQuery] = useState("");
 
   useEffect(() => {
     handleGetUserApplyJob();
@@ -18,8 +32,14 @@ const CompanyJobInfoStatus = (props) => {
   }, [id]);
 
   const handleGetUserApplyJob = async () => {
-    let response = await getUserApplyJob(id);
+    let response = await getUserApplyJob(
+      id,
+      statusQuery,
+      currentPage,
+      currentLimit
+    );
     if (response && response.EC === 0) {
+      setTotalPages(response.DT.totalPages);
       setUserApplyJob(response.DT);
     }
   };
@@ -30,25 +50,51 @@ const CompanyJobInfoStatus = (props) => {
       let group = response.DT.groupWithRoles.name;
       if (group === "Customer") {
         setUserValid(true);
-        setUserEmail(response.DT.email);
       } else {
         setUserValid(false);
-        setUserEmail("");
       }
     } else {
       setUserValid(false);
-      setUserEmail("");
     }
   };
+
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
+
+  const onHideModalJob = async () => {
+    setIsShowModalViewCV(false);
+    setViewCV("");
+    setViewCoverLetter("");
+    setIdRecruitment("");
+    setStatusRecrutment("");
+    await handleGetUserApplyJob();
+  };
+
+  useEffect(() => {
+    handleGetUserApplyJob();
+  }, [statusQuery]);
 
   return (
     <>
       {userValid ? (
         <>
-          {userApplyJob && userApplyJob.length > 0 ? (
+          <div className="container">
+            <div class="h2 font-weight-bold">Recruitment</div>
+            <select
+              id=""
+              class="form-select mb-2"
+              onChange={(event) => setStatusQuery(event.target.value)}
+            >
+              <option value="">Tất Cả</option>
+              <option value="0">Đang Chờ Xử Lí</option>
+              <option value="1">Đã Gửi Mail Tuyển Dụng</option>
+              <option value="2">Đã Từ Chối</option>
+            </select>
+          </div>
+          {userApplyJob.recruitments && userApplyJob.recruitments.length > 0 ? (
             <>
               <div class="container rounded bg-white">
-                <div class="h2 font-weight-bold">Recruitment</div>
                 <div class="table-responsive">
                   <table class="table">
                     <thead>
@@ -64,7 +110,7 @@ const CompanyJobInfoStatus = (props) => {
                       <tr id="spacing-row">
                         <td></td>
                       </tr>
-                      {userApplyJob.map((item, index) => {
+                      {userApplyJob.recruitments.map((item, index) => {
                         return (
                           <>
                             <tr class="bg-blue">
@@ -97,20 +143,39 @@ const CompanyJobInfoStatus = (props) => {
                                 </div>
                               </td>
                               <td>
-                                {item.status ? (
+                                {item.status && +item.status === 1 ? (
                                   <div class="d-inline-flex align-items-center active">
                                     <div class="circle mx-1"></div>
-                                    <span>Đã Xử Lí</span>
+                                    <span>Đã Gửi Mail Tuyển Dụng</span>
                                   </div>
                                 ) : (
-                                  <div class="d-inline-flex align-items-center waiting">
-                                    <div class="circle mx-1"></div>
-                                    <span>Đang Chờ Xử Lí</span>
-                                  </div>
+                                  <>
+                                    {item.status && +item.status === 2 ? (
+                                      <div class="d-inline-flex align-items-center warning">
+                                        <div class="circle mx-1"></div>
+                                        <span>Đã Từ Chối</span>
+                                      </div>
+                                    ) : (
+                                      <div class="d-inline-flex align-items-center waiting">
+                                        <div class="circle mx-1"></div>
+                                        <span>Đang Chờ Xử Lí</span>
+                                      </div>
+                                    )}
+                                  </>
                                 )}
                               </td>
                               <td>
-                                <i class="fa fa-eye"></i>
+                                <span
+                                  onClick={() => {
+                                    setIsShowModalViewCV(true);
+                                    setIdRecruitment(item.id);
+                                    setViewCV(item.CV);
+                                    setViewCoverLetter(item.coverletter);
+                                    setStatusRecrutment(item.status);
+                                  }}
+                                >
+                                  <i class="fa fa-eye"></i>
+                                </span>
                               </td>
                             </tr>
                             <tr id="spacing-row">
@@ -123,34 +188,45 @@ const CompanyJobInfoStatus = (props) => {
                   </table>
                 </div>
               </div>
-              {/* <div className="mb-5">
-                      {item.status ? item.status : "Chưa có"}
-                      <br />
-                      {item.coverletter ? item.coverletter : "Chưa có"}
-                      <br />
-                      {item.CV ? item.CV : "Chưa có"}
-                      <br />
-                      <span>user apply:</span>
-                      <br />
-                      {item.User && item.User.username
-                        ? item.User.username
-                        : "Chưa có"}
-                      <br />
-                      {item.User && item.User.email
-                        ? item.User.email
-                        : "Chưa có"}
-                      <br />
-                      {item.User && item.User.phone
-                        ? item.User.phone
-                        : "Chưa có"}
-                      <br />
-                      {item.User && item.User.sex ? item.User.sex : "Chưa có"}
-                      <br />
-                    </div> */}
             </>
           ) : (
-            <>chưa có người nào applied</>
+            <div className="container">
+              <>chưa có người nào applied</>
+            </div>
           )}
+          {totalPages > 0 && (
+            <div className="job-footer mt-3">
+              <ReactPaginate
+                nextLabel=">"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={3}
+                marginPagesDisplayed={2}
+                pageCount={totalPages}
+                previousLabel="<"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakLabel="..."
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+              />
+            </div>
+          )}
+
+          <ModalViewCV
+            show={isShowModalViewCV}
+            onHide={onHideModalJob}
+            viewCV={viewCV}
+            viewCoverletter={viewCoverletter}
+            idRecruitment={idRecruitment}
+            statusRecrutment={statusRecrutment}
+          />
         </>
       ) : (
         <></>
