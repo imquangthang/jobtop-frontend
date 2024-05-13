@@ -53,10 +53,54 @@ const NavHeader = (props) => {
   ) {
     return (
       <>
-        <div className="navbar-light bg-light">
+        <section id="sidebar">
+          <NavLink to="/admin">
+            <div class="brand">
+              <img
+                src={logo}
+                width="30"
+                height="30"
+                className="d-inline-block align-top mx-1"
+                alt="Logo"
+              />
+              <span className="text">Admin</span>
+            </div>
+          </NavLink>
+          <ul class="side-menu top">
+            <li>
+              <NavLink to="/accounts">
+                <span class="text">Account</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/roles">
+                <span class="text">Roles</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/group-role">
+                <span class="text">Group-role</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/edit-jobs">
+                <span class="text">Edit Jobs</span>
+              </NavLink>
+            </li>
+          </ul>
+          <ul class="side-menu">
+            <li>
+              <NavLink to="#" class="logout">
+                <span onClick={() => handleLogout()}>Log out</span>
+              </NavLink>
+            </li>
+          </ul>
+        </section>
+
+        <div className="navbar-light bg-light" id="sidebar2">
           <div className="nav-header container">
             <Navbar expand="lg" className="bg-body-tertiary" bg="header">
-              <Navbar.Brand href="/admin">
+              <Navbar.Brand to="/admin">
                 <h3 className="brand">
                   <img
                     src={logo}
@@ -86,10 +130,6 @@ const NavHeader = (props) => {
                     </NavLink>
                   </Nav>
                   <Nav>
-                    <Nav.Item className="nav-link welcome">
-                      WELCOME {user.account.username} !
-                    </Nav.Item>
-
                     <NavDropdown title="Settings" id="basic-nav-dropdown">
                       <NavDropdown.Item>Change Password</NavDropdown.Item>
                       <NavDropdown.Divider />
@@ -104,6 +144,54 @@ const NavHeader = (props) => {
           </div>
         </div>
       </>
+      // <>
+      //   <div className="navbar-light bg-light">
+      //     <div className="nav-header container">
+      //       <Navbar expand="lg" className="bg-body-tertiary" bg="header">
+      //         <Navbar.Brand to="/admin">
+      //           <h3 className="brand">
+      //             <img
+      //               src={logo}
+      //               width="30"
+      //               height="30"
+      //               className="d-inline-block align-top mx-3"
+      //               alt="Logo"
+      //             />
+      //             <span className="brand-name">Admin</span>
+      //           </h3>
+      //         </Navbar.Brand>
+      //         <Container>
+      //           <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      //           <Navbar.Collapse id="basic-navbar-nav">
+      //             <Nav className="me-auto">
+      //               <NavLink to="/accounts" className="nav-link">
+      //                 Account
+      //               </NavLink>
+      //               <NavLink to="/roles" className="nav-link">
+      //                 Roles
+      //               </NavLink>
+      //               <NavLink to="/group-role" className="nav-link">
+      //                 Group-Role
+      //               </NavLink>
+      //               <NavLink to="/edit-jobs" className="nav-link">
+      //                 Edit Jobs
+      //               </NavLink>
+      //             </Nav>
+      //             <Nav>
+      //               <NavDropdown title="Settings" id="basic-nav-dropdown">
+      //                 <NavDropdown.Item>Change Password</NavDropdown.Item>
+      //                 <NavDropdown.Divider />
+      //                 <NavDropdown.Item>
+      //                   <span onClick={() => handleLogout()}>Log out</span>
+      //                 </NavDropdown.Item>
+      //               </NavDropdown>
+      //             </Nav>
+      //           </Navbar.Collapse>
+      //         </Container>
+      //       </Navbar>
+      //     </div>
+      //   </div>
+      // </>
     );
   } else {
     return <></>;

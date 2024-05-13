@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-tailwind/react": "2.1.9",
+    "@react-pdf/renderer": "^3.4.4",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

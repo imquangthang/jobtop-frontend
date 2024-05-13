@@ -86,11 +86,19 @@ const NavHeader = (props) => {
                   <Nav>
                     {user && user.isAuthenticated === true ? (
                       <>
-                        <Nav.Item className="nav-link welcome">
-                          WELCOME {user.account.username} !
-                        </Nav.Item>
-
                         <NavDropdown title="Settings" id="basic-nav-dropdown">
+                          <NavDropdown.Item>
+                            <Link
+                              to={{
+                                pathname: `/user-profile/${user.account.username}`,
+                                state: {
+                                  email: user.account.email,
+                                },
+                              }}
+                            >
+                              Profile
+                            </Link>
+                          </NavDropdown.Item>
                           <NavDropdown.Item>Change Password</NavDropdown.Item>
                           <NavDropdown.Divider />
                           <NavDropdown.Item>

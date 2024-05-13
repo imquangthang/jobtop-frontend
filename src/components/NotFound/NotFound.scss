@@ -1,5 +1,7 @@
 .bg {
   background: rgb(248, 249, 250) !important;
+  position: absolute;
+  z-index: 20;
 }
 .card {
   margin-top: auto;

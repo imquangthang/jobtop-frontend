@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const NotFound = (props) => {
   return (
     <>
-      <div class="wrapper bg">
+      <div class="wrapper bg" id='error'>
         <div class="error-404 d-flex align-items-center justify-content-center">
           <div class="container">
             <div class="card my-5">

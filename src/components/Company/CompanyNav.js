@@ -53,7 +53,37 @@ const CompanyNav = (props) => {
   ) {
     return (
       <>
-        <div className="navbar-light bg-light">
+        <section id="sidebar">
+          <NavLink to="/company">
+            <div class="brand">
+              <img
+                src={logo}
+                width="30"
+                height="30"
+                className="d-inline-block align-top mx-1"
+                alt="Logo"
+              />
+              <span className="text">Company</span>
+            </div>
+          </NavLink>
+          <ul class="side-menu top">
+            <li>
+              <NavLink to="/company-jobs">Company jobs</NavLink>
+            </li>
+            <li>
+              <NavLink to="/company-jobs-status">Check jobs</NavLink>
+            </li>
+          </ul>
+          <ul class="side-menu">
+            <li>
+              <NavLink to="#" class="logout">
+                <span onClick={() => handleLogout()}>Log out</span>
+              </NavLink>
+            </li>
+          </ul>
+        </section>
+
+        <div className="navbar-light bg-light" id="sidebar2">
           <div className="nav-header container">
             <Navbar expand="lg" className="bg-body-tertiary" bg="header">
               <Navbar.Brand href="/company">
@@ -80,10 +110,6 @@ const CompanyNav = (props) => {
                     </NavLink>
                   </Nav>
                   <Nav>
-                    <Nav.Item className="nav-link welcome">
-                      WELCOME {user.account.username} !
-                    </Nav.Item>
-
                     <NavDropdown title="Settings" id="basic-nav-dropdown">
                       <NavDropdown.Item>Change Password</NavDropdown.Item>
                       <NavDropdown.Divider />

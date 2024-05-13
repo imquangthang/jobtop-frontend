@@ -8,7 +8,7 @@ import Job from "../components/Job/Job";
 import JobInfo from "../components/Job/JobInfo";
 import NotFound from "../components/NotFound/NotFound";
 import Admin from "../components/Admin/Admin";
-
+import AdminNav from "../components/Admin/AdminNav";
 const AppRoutes = (props) => {
   return (
     <>
@@ -27,6 +27,7 @@ const AppRoutes = (props) => {
         </Route>
         <Route path="*">
           <NotFound />
+          <AdminNav />
         </Route>
       </Switch>
     </>

@@ -13,22 +13,18 @@ import CompanyJob from "../components/Company/CompanyJob";
 import CompanyJobStatus from "../components/Company/CompanyJobStatus";
 import JobInfo from "../components/Job/JobInfo";
 import NotFound from "../components/NotFound/NotFound";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import Footer from "../components/Footer/Footer";
+import Profile from "../components/Profile/Profile";
+import CVForm from "../components/Profile/CVForm";
 
 const AppRoutes = (props) => {
+  const location = useLocation();
   return (
     <>
       <Switch>
-        <PrivateRoutes path="/accounts" component={Users} />
-        <PrivateRoutes path="/roles" component={Role} />
-        <PrivateRoutes path="/group-role" component={GroupRole} />
-        <PrivateRoutes path="/edit-jobs" component={EditJob} />
         <PrivateRoutes path="/cv-template" component={CvTemplate} />
         <PrivateRoutes path="/job" component={Job} />
-        <PrivateRoutes path="/company-jobs" component={CompanyJob} />
-        <PrivateRoutes
-          path="/company-jobs-status"
-          component={CompanyJobStatus}
-        />
 
         <Route path="/login">
           <Login />
@@ -42,10 +38,21 @@ const AppRoutes = (props) => {
         <Route path="/job-info/:id">
           <JobInfo />
         </Route>
+        <Route path="/user-profile/:username">
+          <CVForm />
+        </Route>
         <Route path="*">
           <NotFound />
         </Route>
       </Switch>
+
+      {location &&
+        location.pathname !== "/login" &&
+        location.pathname !== "/register" && (
+          <div>
+            <Footer />
+          </div>
+        )}
     </>
   );
 };

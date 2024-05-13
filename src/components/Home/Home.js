@@ -96,14 +96,6 @@ const Home = (props) => {
           </div>
         </div>
         <Job />
-        {/* <div>
-          <iframe
-            src="https://drive.google.com/file/d/1ORThHlO3MWJ3I-o3ofKw2zB6Syf_tEQC/preview"
-            width="640"
-            height="480"
-            allow="autoplay"
-          ></iframe>
-        </div> */}
       </div>
     </>
   );
