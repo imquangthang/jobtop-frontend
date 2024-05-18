@@ -65,7 +65,7 @@ const ModalViewCV = (props) => {
             </div>
           </div>
         </Modal.Body>
-        <Modal.Footer className="modal-footer">
+        <Modal.Footer className="modalViewCV-footer">
           <Button
             variant="success"
             onClick={() => handleConfirmApply("Accept")}

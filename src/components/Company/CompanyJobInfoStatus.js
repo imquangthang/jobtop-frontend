@@ -62,7 +62,7 @@ const CompanyJobInfoStatus = (props) => {
     setCurrentPage(+event.selected + 1);
   };
 
-  const onHideModalJob = async () => {
+  const onHideModalViewCV = async () => {
     setIsShowModalViewCV(false);
     setViewCV("");
     setViewCoverLetter("");
@@ -221,7 +221,7 @@ const CompanyJobInfoStatus = (props) => {
 
           <ModalViewCV
             show={isShowModalViewCV}
-            onHide={onHideModalJob}
+            onHide={onHideModalViewCV}
             viewCV={viewCV}
             viewCoverletter={viewCoverletter}
             idRecruitment={idRecruitment}

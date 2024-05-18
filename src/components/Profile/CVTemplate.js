@@ -7,6 +7,7 @@ import {
   View,
   StyleSheet,
   Image,
+  Font,
 } from "@react-pdf/renderer";
 
 const styles = StyleSheet.create({
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   section: {
-    margin: 10,
+    margin: 30,
     padding: 10,
   },
   header: {
@@ -37,6 +38,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: "bold",
   },
+  title: {
+    fontSize: 18,
+    fontWeight: "",
+  },
+});
+
+Font.register({
+  family: "Roboto",
+  src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf",
 });
 
 const CVTemplate = ({
@@ -50,13 +60,13 @@ const CVTemplate = ({
   experience,
   imageSrc,
 }) => (
-  <Document>
+  <Document style={{ fontFamily: "Roboto" }}>
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
         <Image src={imageSrc} style={styles.image} />
         <View>
           <Text style={styles.headerText}>{name}</Text>
-          <Text>{jobTitle}</Text>
+          <Text style={styles.title}>{jobTitle}</Text>
         </View>
       </View>
       <View style={styles.section}>
@@ -69,21 +79,15 @@ const CVTemplate = ({
       </View>
       <View style={styles.section}>
         <Text style={styles.subHeader}>Skills</Text>
-        {skills.map((skill, index) => (
-          <Text key={index}>- {skill}</Text>
-        ))}
+        <Text>{skills}</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.subHeader}>Education</Text>
-        {education.map((edu, index) => (
-          <Text key={index}>- {edu}</Text>
-        ))}
+        <Text>{education}</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.subHeader}>Experience</Text>
-        {experience.map((exp, index) => (
-          <Text key={index}>- {exp}</Text>
-        ))}
+        <Text>{experience}</Text>
       </View>
     </Page>
   </Document>

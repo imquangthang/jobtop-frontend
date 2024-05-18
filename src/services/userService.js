@@ -50,6 +50,20 @@ const logoutUser = () => {
   return axios.post("/api/v1/logout");
 };
 
+const getUserByEmail = (email) => {
+  return axios.get(`/api/v1/user/read-info-user?email=${email}`);
+};
+
+const updateUser = (userData) => {
+  return axios.put("/api/v1/user/update-info-user", {
+    ...userData,
+  });
+};
+
+const getListJobRecruitment = (email) => {
+  return axios.get(`/api/v1/user/read/job-recruitment?email=${email}`);
+};
+
 export {
   registerNewUser,
   loginUser,
@@ -60,4 +74,7 @@ export {
   updateCurrentUser,
   getUserAccount,
   logoutUser,
+  getUserByEmail,
+  updateUser,
+  getListJobRecruitment,
 };

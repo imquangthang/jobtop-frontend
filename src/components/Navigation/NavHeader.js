@@ -79,9 +79,9 @@ const NavHeader = (props) => {
                     <NavLink to="/job" className="nav-link">
                       Việc làm
                     </NavLink>
-                    <NavLink to="/cv-template" className="nav-link">
+                    {/* <NavLink to="/" className="nav-link">
                       CV
-                    </NavLink>
+                    </NavLink> */}
                   </Nav>
                   <Nav>
                     {user && user.isAuthenticated === true ? (

@@ -75,7 +75,7 @@ const ModalConfirmApply = (props) => {
         >
           {loading ? (
             <div className="loading-container">
-              <Rings width={100} height={100} color="#1877f2"  />
+              <Rings width={100} height={100} color="#1877f2" />
               <div>Waiting...</div>
             </div>
           ) : (
@@ -138,7 +138,7 @@ const ModalConfirmApply = (props) => {
                   </>
                 )}
               </Modal.Body>
-              <Modal.Footer className="modal-footer">
+              <Modal.Footer className="modalConfirm-footer">
                 {action && action === "Accept" ? (
                   <>
                     <Button variant="success" onClick={() => handleAccept()}>
