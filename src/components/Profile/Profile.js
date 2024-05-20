@@ -85,11 +85,13 @@ const Profile = (props) => {
                           width="110"
                           height="110"
                         ></img>
-                        <div class="mt-3">
+                        <div class="mt-3 username">
                           <h4>{userData.username}</h4>
-                          <p class="text-muted font-size-sm d-inline">
-                            {userData.address}
-                          </p>
+                          <div className="address_user text_ellipsis">
+                            <p class="text-muted font-size-sm d-inline">
+                              {userData.address}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>

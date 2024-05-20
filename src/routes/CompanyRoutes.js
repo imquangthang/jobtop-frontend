@@ -8,6 +8,7 @@ import NotFound from "../components/NotFound/NotFound";
 import CompanyJob from "../components/Company/CompanyJob";
 import CompanyJobStatus from "../components/Company/CompanyJobStatus";
 import Company from "../components/Company/Company";
+import CompanyInformation from "../components/Profile/CompanyInformation";
 
 const CompanyRoutes = (props) => {
   return (
@@ -20,15 +21,12 @@ const CompanyRoutes = (props) => {
           path="/company-jobs-status"
           component={CompanyJobStatus}
         />
+        <PrivateRoutes path="/job-info/:id" component={JobInfo} />
+        <PrivateRoutes path="/job-info-status/:id" component={CompanyJobInfoStatus} />
+        <PrivateRoutes path="/company-information" component={CompanyInformation} />
 
         <Route path="/Company" exact>
           <Company />
-        </Route>
-        <Route path="/job-info/:id">
-          <JobInfo />
-        </Route>
-        <Route path="/job-info-status/:id">
-          <CompanyJobInfoStatus />
         </Route>
         <Route path="*">
           <NotFound />

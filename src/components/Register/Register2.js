@@ -1,4 +1,4 @@
-import "./Register2.scss";
+import "./Register.scss";
 import { useHistory, Link } from "react-router-dom";
 // import axios from "axios";
 import { useEffect, useState, useContext } from "react";
@@ -11,6 +11,8 @@ import { UserContext } from "../../context/UserContext";
 const Register2 = (props) => {
   const { user } = useContext(UserContext);
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [username, setUsername] = useState("");
@@ -25,9 +27,6 @@ const Register2 = (props) => {
   const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
 
   let history = useHistory();
-  const handleLogin = () => {
-    history.push("/login");
-  };
 
   useEffect(() => {
     if (user && user.isAuthenticated) {
@@ -76,7 +75,14 @@ const Register2 = (props) => {
     let check = isValidInput();
 
     if (check === true) {
-      let serverData = await registerNewUser(email, phone, username, password);
+      let serverData = await registerNewUser(
+        firstName,
+        lastName,
+        email,
+        phone,
+        username,
+        password
+      );
       if (+serverData.EC === 0) {
         toast.success(serverData.EM);
         history.push("/login");
@@ -113,10 +119,16 @@ const Register2 = (props) => {
                           <h3 class="">Register</h3>
                         </div>
                       </Link>
-                      <p className="gap-1">
-                        Already have an account?
-                        <Link to="/login">Login here</Link>
-                      </p>
+                      <div className="mb-1">
+                        <p className="gap-1">
+                          Already have an account? 
+                          <Link to="/login"> Login here</Link>
+                        </p>
+                        <p className="gap-1">
+                          Register with Company?
+                          <Link to="/register-company"> Click here</Link>
+                        </p>
+                      </div>
                       <div class="form-body">
                         <form class="row g-3">
                           <div class="col-sm-6">
@@ -124,10 +136,13 @@ const Register2 = (props) => {
                               First Name
                             </label>
                             <input
-                              type="email"
+                              type="text"
                               class="form-control"
                               id="inputFirstName"
                               placeholder="Jhon"
+                              onChange={(event) =>
+                                setFirstName(event.target.value)
+                              }
                             ></input>
                           </div>
                           <div class="col-sm-6">
@@ -135,10 +150,13 @@ const Register2 = (props) => {
                               Last Name
                             </label>
                             <input
-                              type="email"
+                              type="text"
                               class="form-control"
                               id="inputLastName"
                               placeholder="Deo"
+                              onChange={(event) =>
+                                setLastName(event.target.value)
+                              }
                             ></input>
                           </div>
                           <div class="col-12">
@@ -248,129 +266,6 @@ const Register2 = (props) => {
           </div>
         </div>
       </div>
-
-      {/*
-      <div className="register-contanier">
-        <div className="container">
-          <div className="row px-3 px-sm-0">
-            <div className="content-left col-12 d-none col-sm-7 d-sm-block">
-              <div className="brand">
-                <Link to="/">
-                  <span title="Return to HomePage" className="brand-item">
-                    <img
-                      src={logo}
-                      width="50"
-                      height="50"
-                      className="d-inline-block align-top me-3"
-                      alt="Logo"
-                    />
-                    <div className="brand__name my-3">JOBTOP</div>
-                  </span>
-                </Link>
-              </div>
-              <div className="detail">Việc Làm Dành Cho Bạn</div>
-            </div>
-
-            <div className="content-right col-sm-5 col-12 d-flex flex-column gap-3 py-3">
-              <div className="brand d-sm-none">JOBTOP</div>
-              <div className="form-group">
-                <label>Email:</label>
-                <input
-                  type="text"
-                  className={
-                    objCheckInput.isValidEmail
-                      ? "form-control"
-                      : "form-control is-invalid"
-                  }
-                  placeholder="Email address"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Phone number:</label>
-                <input
-                  type="text"
-                  className={
-                    objCheckInput.isValidPhone
-                      ? "form-control"
-                      : "form-control is-invalid"
-                  }
-                  placeholder="Phone number"
-                  value={phone}
-                  onChange={(event) => setPhone(event.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Username:</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(event) => setUsername(event.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Password:</label>
-                <input
-                  type="password"
-                  className={
-                    objCheckInput.isValidPassword
-                      ? "form-control"
-                      : "form-control is-invalid"
-                  }
-                  placeholder="Password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Re-enter Password:</label>
-                <input
-                  type="password"
-                  className={
-                    objCheckInput.isValidConfirmPassword
-                      ? "form-control"
-                      : "form-control is-invalid"
-                  }
-                  placeholder="Re-enter Password"
-                  value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                />
-              </div>
-
-              <button
-                className="btn btn-primary"
-                type="button"
-                onClick={() => handleRegister()}
-              >
-                Register2
-              </button>
-              <hr />
-              <div className="text-center">
-                <button
-                  className="btn btn-success"
-                  onClick={() => handleLogin()}
-                >
-                  Already've an account. Login
-                </button>
-                <div className="mt-3 return">
-                  <Link to="/">
-                    <i className="fa fa-arrow-circle-left"></i>
-                    <span title="Return to HomePage"> Return to HomePage </span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      */}
     </>
   );
 };

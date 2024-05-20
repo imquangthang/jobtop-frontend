@@ -4,6 +4,7 @@ import {
   NavLink,
   useLocation,
   useHistory,
+  Link,
 } from "react-router-dom/cjs/react-router-dom.min";
 import { UserContext } from "../../context/UserContext";
 import Container from "react-bootstrap/Container";
@@ -73,10 +74,22 @@ const CompanyNav = (props) => {
             <li>
               <NavLink to="/company-jobs-status">Check jobs</NavLink>
             </li>
+            <li>
+              <Link
+                to={{
+                  pathname: "/company-information",
+                  state: {
+                    email: user.account.email,
+                  },
+                }}
+              >
+                Information
+              </Link>
+            </li>
           </ul>
           <ul class="side-menu">
             <li>
-              <NavLink to="#" class="logout">
+              <NavLink to="/login" class="logout">
                 <span onClick={() => handleLogout()}>Log out</span>
               </NavLink>
             </li>

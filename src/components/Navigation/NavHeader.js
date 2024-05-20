@@ -77,11 +77,11 @@ const NavHeader = (props) => {
                       Home
                     </NavLink>
                     <NavLink to="/job" className="nav-link">
-                      Việc làm
+                      Jobs
                     </NavLink>
-                    {/* <NavLink to="/" className="nav-link">
-                      CV
-                    </NavLink> */}
+                    <NavLink to="/list-company" className="nav-link">
+                      Company
+                    </NavLink>
                   </Nav>
                   <Nav>
                     {user && user.isAuthenticated === true ? (

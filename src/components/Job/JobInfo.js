@@ -109,25 +109,21 @@ const JobInfo = (props) => {
                         <div className="single_jobs white-bg d-flex justify-content-between">
                           <div className="jobs_left d-flex align-items-center">
                             <div className="thumb">
-                              <img
-                                src="https://cdn1.vieclam24h.vn/tvn/images/employer_avatar/2021/10/27/images/163530524363.jpeg"
-                                alt=""
-                              ></img>
+                              <img src={job.sourcePicture} alt=""></img>
                             </div>
                             <div className="jobs_content">
                               <h4>{job.title}</h4>
 
-                              <div className="location">
-                                <a href="#">
-                                  <p>
-                                    {job.Company && job.Company.name ? (
-                                      job.Company.name
-                                    ) : (
-                                      <></>
-                                    )}
-                                  </p>
-                                </a>
-                              </div>
+                              {job.Company ? (
+                                <div className="location">
+                                  <a href={job.Company.id ? `/company-info/${job.Company.id}` : "#"}>
+                                    <p>{job.Company.name ? job.Company.name : ""}</p>
+                                  </a>
+                                </div>
+                              ) : (
+                                <></>
+                              )}
+
                               <div className="links_locat d-flex align-items-center">
                                 <div className="location">
                                   <p>

@@ -4,16 +4,18 @@ import { useHistory, Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { registerNewUser } from "../../services/userService";
+import { registerNewCompany, registerNewUser } from "../../services/userService";
 import logo from "../../logo.png";
 import { UserContext } from "../../context/UserContext";
 
-const Register = (props) => {
+const Register2 = (props) => {
   const { user } = useContext(UserContext);
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [username, setUsername] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const defaultValidInput = {
@@ -25,9 +27,6 @@ const Register = (props) => {
   const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
 
   let history = useHistory();
-  const handleLogin = () => {
-    history.push("/login");
-  };
 
   useEffect(() => {
     if (user && user.isAuthenticated) {
@@ -76,7 +75,12 @@ const Register = (props) => {
     let check = isValidInput();
 
     if (check === true) {
-      let serverData = await registerNewUser(email, phone, username, password);
+      let serverData = await registerNewCompany(
+        email,
+        phone,
+        companyName,
+        password
+      );
       if (+serverData.EC === 0) {
         toast.success(serverData.EM);
         history.push("/login");
@@ -91,125 +95,154 @@ const Register = (props) => {
     }
   };
 
+  useEffect(() => {
+    console.log(firstName);
+    console.log(lastName);
+  });
+
   return (
-    <div className="register-contanier">
-      <div className="container">
-        <div className="row px-3 px-sm-0">
-          <div className="content-left col-12 d-none col-sm-7 d-sm-block">
-            <div className="brand">
-              <Link to="/">
-                <span title="Return to HomePage" className="brand-item">
-                  <img
-                    src={logo}
-                    width="50"
-                    height="50"
-                    className="d-inline-block align-top me-3"
-                    alt="Logo"
-                  />
-                  <div className="brand__name my-3">JOBTOP</div>
-                </span>
-              </Link>
-            </div>
-            <div className="detail">Việc Làm Dành Cho Bạn</div>
-          </div>
-
-          <div className="content-right col-sm-5 col-12 d-flex flex-column gap-3 py-3">
-            <div className="brand d-sm-none">JOBTOP</div>
-            <div className="form-group">
-              <label>Email:</label>
-              <input
-                type="text"
-                className={
-                  objCheckInput.isValidEmail
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
-                placeholder="Email address"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Phone number:</label>
-              <input
-                type="text"
-                className={
-                  objCheckInput.isValidPhone
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
-                placeholder="Phone number"
-                value={phone}
-                onChange={(event) => setPhone(event.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Username:</label>
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Username"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Password:</label>
-              <input
-                type="password"
-                className={
-                  objCheckInput.isValidPassword
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
-                placeholder="Password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Re-enter Password:</label>
-              <input
-                type="password"
-                className={
-                  objCheckInput.isValidConfirmPassword
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
-                placeholder="Re-enter Password"
-                value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
-              />
-            </div>
-
-            <button
-              className="btn btn-primary"
-              type="button"
-              onClick={() => handleRegister()}
-            >
-              Register
-            </button>
-            <hr />
-            <div className="text-center">
-              <button className="btn btn-success" onClick={() => handleLogin()}>
-                Already've an account. Login
-              </button>
-              <div className="mt-3 return">
-                <Link to="/">
-                  <i className="fa fa-arrow-circle-left"></i>
-                  <span title="Return to HomePage"> Return to HomePage </span>
-                </Link>
+    <>
+      <div class="wrapper">
+        <div class="d-flex align-items-center justify-content-center my-5 my-lg-0">
+          <div class="container">
+            <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-2">
+              <div class="col mx-auto">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="border p-4 rounded">
+                      <Link to="/">
+                        <div class="text-center">
+                          <img
+                            src={logo}
+                            width="30"
+                            height="30"
+                            className="d-inline-block align-top me-3"
+                            alt="Logo"
+                          />
+                          <h3 class="">Register Company</h3>
+                        </div>
+                      </Link>
+                      <div className="mb-1">
+                        <p className="gap-1">
+                          Already have an account?
+                          <Link to="/login">Login here</Link>
+                        </p>
+                        <p className="gap-1">
+                            Register with Client?
+                            <Link to="/register"> Click here</Link>
+                          </p>
+                      </div>
+                      <div class="form-body">
+                        <form class="row g-3">
+                          <div class="col-12">
+                            <label for="inputEmailAddress" class="form-label">
+                              Email Address
+                            </label>
+                            <input
+                              type="text"
+                              className={
+                                objCheckInput.isValidEmail
+                                  ? "form-control"
+                                  : "form-control is-invalid"
+                              }
+                              placeholder="Email address"
+                              value={email}
+                              onChange={(event) => setEmail(event.target.value)}
+                            />
+                          </div>
+                          <div class="col-12">
+                            <label for="inputEmailAddress" class="form-label">
+                              Phone Number
+                            </label>
+                            <input
+                              type="number"
+                              className={
+                                objCheckInput.isValidPhone
+                                  ? "form-control"
+                                  : "form-control is-invalid"
+                              }
+                              placeholder="Phone number"
+                              value={phone}
+                              onChange={(event) => setPhone(event.target.value)}
+                            />
+                          </div>
+                          <div class="col-12">
+                            <label for="inputEmailAddress" class="form-label">
+                              Company name
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Company name"
+                              value={companyName}
+                              onChange={(event) =>
+                                setCompanyName(event.target.value)
+                              }
+                            />
+                          </div>
+                          <div class="col-12">
+                            <label for="inputChoosePassword" class="form-label">
+                              Password
+                            </label>
+                            <div class="input-group" id="show_hide_password">
+                              <input
+                                type="password"
+                                className={
+                                  objCheckInput.isValidPassword
+                                    ? "form-control"
+                                    : "form-control is-invalid"
+                                }
+                                placeholder="Password"
+                                value={password}
+                                onChange={(event) =>
+                                  setPassword(event.target.value)
+                                }
+                              />
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <label for="inputChoosePassword" class="form-label">
+                              Re-Enter Password
+                            </label>
+                            <div class="input-group" id="show_hide_password">
+                              <input
+                                type="password"
+                                className={
+                                  objCheckInput.isValidConfirmPassword
+                                    ? "form-control"
+                                    : "form-control is-invalid"
+                                }
+                                placeholder="Re-enter Password"
+                                value={confirmPassword}
+                                onChange={(event) =>
+                                  setConfirmPassword(event.target.value)
+                                }
+                              />
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <div class="d-grid">
+                              <button
+                                className="btn btn-primary"
+                                type="button"
+                                onClick={() => handleRegister()}
+                              >
+                                Register
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Register;
+export default Register2;

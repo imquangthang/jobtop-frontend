@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
-import { getUserApplyJob } from "../../services/companyServive";
+import { getUserApplyJob } from "../../services/companyService";
 import "./CompanyJobInfoStatus.scss";
 import { getUserAccount } from "../../services/userService";
 import { toast } from "react-toastify";

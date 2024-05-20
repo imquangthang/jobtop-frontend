@@ -4,7 +4,7 @@ import { Button, Modal } from "react-bootstrap";
 import {
   rejectRecruitment,
   acceptRecruitment,
-} from "../../services/companyServive";
+} from "../../services/companyService";
 import { toast } from "react-toastify";
 import { Rings } from "react-loader-spinner";
 
@@ -13,6 +13,8 @@ const ModalConfirmApply = (props) => {
   const [timeInterview, setTimeInterview] = useState("");
   const [dayInterview, setDayInterview] = useState("");
   const [address, setAddress] = useState("");
+  const [interviewer, setInterviewer] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const handleCloseModalConfirmApply = () => {
     props.onHide();
@@ -43,6 +45,8 @@ const ModalConfirmApply = (props) => {
         dayInterview,
         timeInterview,
         address,
+        interviewer,
+        phone,
       };
       let response = await acceptRecruitment(data);
       if (response && response.EC === 0) {
@@ -93,7 +97,7 @@ const ModalConfirmApply = (props) => {
                         <label>Day Interview:</label>
                         <input
                           className={
-                            timeInterview
+                            dayInterview
                               ? "form-control"
                               : "form-control is-invalid"
                           }
@@ -128,6 +132,34 @@ const ModalConfirmApply = (props) => {
                           type="text"
                           value={address}
                           onChange={(event) => setAddress(event.target.value)}
+                        />
+                      </div>
+
+                      <div className="col-12 col-sm-12 form-group">
+                        <label>Interviewer:</label>
+                        <input
+                          className={
+                            interviewer
+                              ? "form-control"
+                              : "form-control is-invalid"
+                          }
+                          type="text"
+                          value={interviewer}
+                          onChange={(event) =>
+                            setInterviewer(event.target.value)
+                          }
+                        />
+                      </div>
+
+                      <div className="col-12 col-sm-12 form-group">
+                        <label>Phone:</label>
+                        <input
+                          className={
+                            phone ? "form-control" : "form-control is-invalid"
+                          }
+                          type="number"
+                          value={phone}
+                          onChange={(event) => setPhone(event.target.value)}
                         />
                       </div>
                     </div>

@@ -1,10 +1,33 @@
 import axios from "../setup/axios";
 
-const registerNewUser = (email, phone, username, password) => {
+const registerNewUser = (
+  firstName,
+  lastName,
+  email,
+  phone,
+  username,
+  password
+) => {
   return axios.post("/api/v1/register", {
+    firstName,
+    lastName,
     email,
     phone,
     username,
+    password,
+  });
+};
+
+const registerNewCompany = (
+  email,
+  phone,
+  companyName,
+  password
+) => {
+  return axios.post("/api/v1/register-company", {
+    email,
+    phone,
+    companyName,
     password,
   });
 };
@@ -77,4 +100,5 @@ export {
   getUserByEmail,
   updateUser,
   getListJobRecruitment,
+  registerNewCompany,
 };

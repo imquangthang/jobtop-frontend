@@ -1,13 +1,23 @@
 import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { fetchAllRoles, deleteRole } from "../../services/roleService";
 import { toast } from "react-toastify";
+import ReactPaginate from "react-paginate";
 
 const TableRoles = forwardRef((props, ref) => {
   const [listRoles, setListRoles] = useState([]);
 
+  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentLimit, setCurrentLimit] = useState(6);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const handlePageClick = async (event) => {
+    setCurrentPage(+event.selected + 1);
+  };
+
   useEffect(() => {
     getAllRoles();
-  }, []);
+  }, [currentPage,currentLimit]);
 
   useImperativeHandle(ref, () => ({
     fetListRolesAgain() {
@@ -16,9 +26,10 @@ const TableRoles = forwardRef((props, ref) => {
   }));
 
   const getAllRoles = async () => {
-    let data = await fetchAllRoles();
+    let data = await fetchAllRoles(currentPage, currentLimit);
     if (data && +data.EC === 0) {
-      setListRoles(data.DT);
+      setTotalPages(data.DT.totalPages);
+      setListRoles(data.DT.roles);
     }
   };
 
@@ -91,51 +102,33 @@ const TableRoles = forwardRef((props, ref) => {
             )}
           </tbody>
         </table>
+
+        {totalPages > 0 && (
+          <div className="job-footer mt-3">
+            <ReactPaginate
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={3}
+              marginPagesDisplayed={2}
+              pageCount={totalPages}
+              previousLabel="<"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              breakLabel="..."
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              activeClassName="active"
+              renderOnZeroPageCount={null}
+            />
+          </div>
+        )}
       </div>
     </>
-    // <>
-    //   <table className="table table-bordered table-hover">
-    //     <thead>
-    //       <tr>
-    //         <th scope="col">Id</th>
-    //         <th scope="col">URL</th>
-    //         <th scope="col">Description</th>
-    //         <th scope="col">Actions</th>
-    //       </tr>
-    //     </thead>
-    //     <tbody>
-    //       {listRoles && listRoles.length > 0 ? (
-    //         <>
-    //           {listRoles.map((item, index) => {
-    //             return (
-    //               <tr key={`row-${index}`}>
-    //                 {/* <td>{(currentPage - 1) * currentLimit + index + 1}</td> */}
-    //                 <td>{item.id}</td>
-    //                 <td>{item.url}</td>
-    //                 <td>{item.description}</td>
-    //                 <td>
-    //                   <span
-    //                     title="Delete"
-    //                     className="delete"
-    //                     onClick={() => handleDeleteRole(item)}
-    //                   >
-    //                     <i class="fa fa-trash"></i>
-    //                   </span>
-    //                 </td>
-    //               </tr>
-    //             );
-    //           })}
-    //         </>
-    //       ) : (
-    //         <>
-    //           <tr>
-    //             <td colSpan={4}>Not Found Roles</td>
-    //           </tr>
-    //         </>
-    //       )}
-    //     </tbody>
-    //   </table>
-    // </>
   );
 });
 

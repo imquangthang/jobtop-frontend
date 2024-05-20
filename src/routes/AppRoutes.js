@@ -1,6 +1,7 @@
 import { Switch, Route } from "react-router-dom";
 import Login from "../components/Login/Login2";
-import Register from "../components/Register/Register2";
+import Register2 from "../components/Register/Register2";
+import Register from "../components/Register/Register";
 import PrivateRoutes from "./PrivateRoutes";
 import Home from "../components/Home/Home";
 import Job from "../components/Job/Job";
@@ -11,6 +12,8 @@ import Footer from "../components/Footer/Footer";
 import Profile from "../components/Profile/Profile";
 import CVTemplate from "../components/Profile/CVTemplate";
 import { PDFViewer } from "@react-pdf/renderer";
+import CompanyList from "../components/Company/CompanyList";
+import CompanyInfo from "../components/Company/CompanyInfo";
 
 const AppRoutes = (props) => {
   const location = useLocation();
@@ -31,23 +34,23 @@ const AppRoutes = (props) => {
   return (
     <>
       <Switch>
-        {/* <PrivateRoutes path="/cv-template" component={CvTemplate} /> */}
         <PrivateRoutes path="/job" component={Job} />
+        <PrivateRoutes path="/list-company" component={CompanyList} />
+        <PrivateRoutes path="/user-profile/:username" component={Profile} />
+        <PrivateRoutes path="/company-info/:id" component={CompanyInfo} />
+        <PrivateRoutes path="/job-info/:id" component={JobInfo} />
 
         <Route path="/login">
           <Login />
         </Route>
         <Route path="/register">
+          <Register2 />
+        </Route>
+        <Route path="/register-company">
           <Register />
         </Route>
         <Route path="/" exact>
           <Home />
-        </Route>
-        <Route path="/job-info/:id">
-          <JobInfo />
-        </Route>
-        <Route path="/user-profile/:username">
-          <Profile />
         </Route>
         <Route path="/CV-Template">
           <PDFViewer width="1000" height="1920">

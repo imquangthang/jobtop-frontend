@@ -9,6 +9,8 @@ import JobInfo from "../components/Job/JobInfo";
 import NotFound from "../components/NotFound/NotFound";
 import Admin from "../components/Admin/Admin";
 import AdminNav from "../components/Admin/AdminNav";
+import EditCompany from "../components/Company/EditCompany";
+import CompanyInfo from "../components/Company/CompanyInfo";
 const AppRoutes = (props) => {
   return (
     <>
@@ -17,7 +19,10 @@ const AppRoutes = (props) => {
         <PrivateRoutes path="/roles" component={Role} />
         <PrivateRoutes path="/group-role" component={GroupRole} />
         <PrivateRoutes path="/edit-jobs" component={EditJob} />
+        <PrivateRoutes path="/edit-company" component={EditCompany} />
         <PrivateRoutes path="/job" component={Job} />
+        <PrivateRoutes path="/company-info/:id" component={CompanyInfo} />
+
 
         <Route path="/admin" exact>
           <Admin />

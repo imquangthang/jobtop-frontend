@@ -44,6 +44,7 @@ instance.interceptors.response.use(
           window.location.pathname !== "/" &&
           window.location.pathname !== "/login" &&
           window.location.pathname !== "/register" &&
+          window.location.pathname !== "/register-company" &&
           !/^\/job-info\/\d+$/.test(window.location.pathname)
         ) {
           toast.error("Unauthorized the user. Please login...");

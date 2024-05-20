@@ -87,6 +87,11 @@ const NavHeader = (props) => {
                 <span class="text">Edit Jobs</span>
               </NavLink>
             </li>
+            <li>
+              <NavLink to="/edit-company">
+                <span class="text">Edit Company</span>
+              </NavLink>
+            </li>
           </ul>
           <ul class="side-menu">
             <li>
