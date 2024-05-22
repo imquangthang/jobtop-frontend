@@ -4115,7 +4115,22 @@ h3 {
 
 /* line 112, ../../Arafath/CL/December/235. Job board/HTML/scss/_job_details.scss */
 .job_details_area .descript_wrap .single_wrap {
+  min-height: 30%;
   margin-bottom: 30px;
+}
+
+.text_ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.show-text{
+  color: #009dff;
+  user-select: none;
+  :hover{
+    cursor: pointer;
+  }
 }
 
 /* line 114, ../../Arafath/CL/December/235. Job board/HTML/scss/_job_details.scss */

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Link, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { applyJob, getJobInfo } from "../../services/jobService";
 import "./JobInfo.scss";
@@ -12,6 +12,15 @@ const JobInfo = (props) => {
   const [userValid, setUserValid] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [applying, setApplying] = useState(false);
+
+  const [showDesFull, setShowDesFull] = useState(false);
+  const showFullText = () => {
+    setShowDesFull(!showDesFull);
+  };
+
+  useEffect(() => {
+    console.log(showDesFull);
+  }, [showDesFull]);
 
   useEffect(() => {
     handleGetJob();
@@ -116,8 +125,16 @@ const JobInfo = (props) => {
 
                               {job.Company ? (
                                 <div className="location">
-                                  <a href={job.Company.id ? `/company-info/${job.Company.id}` : "#"}>
-                                    <p>{job.Company.name ? job.Company.name : ""}</p>
+                                  <a
+                                    href={
+                                      job.Company.id
+                                        ? `/company-info/${job.Company.id}`
+                                        : "#"
+                                    }
+                                  >
+                                    <p>
+                                      {job.Company.name ? job.Company.name : ""}
+                                    </p>
                                   </a>
                                 </div>
                               ) : (
@@ -140,19 +157,31 @@ const JobInfo = (props) => {
                               </div>
                             </div>
                           </div>
-                          <div className="jobs_right">
-                            <div className="apply_now">
-                              <a className="heart_mark" href="#">
-                                <i className="ti-heart"></i>
-                              </a>
-                            </div>
-                          </div>
                         </div>
                       </div>
                       <div className="descript_wrap white-bg">
                         <div className="single_wrap">
                           <h4>Description</h4>
-                          <p>{job.description}</p>
+                          <p
+                            className={
+                              showDesFull ? "mb-0" : "text_ellipsis mb-0"
+                            }
+                          >
+                            {job.description}
+                          </p>
+                          <div
+                            className="text-center show-text"
+                            onClick={() => showFullText()}
+                          >
+                            <div>
+                              {showDesFull ? "Show less " : "Show full "}
+                              {showDesFull ? (
+                                <i class="fa fa-angle-double-up"></i>
+                              ) : (
+                                <i class="fa fa-angle-double-down"></i>
+                              )}
+                            </div>
+                          </div>
                         </div>
                         <div className="single_wrap">
                           <h4>Requirement</h4>

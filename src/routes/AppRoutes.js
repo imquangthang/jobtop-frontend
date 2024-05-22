@@ -53,7 +53,7 @@ const AppRoutes = (props) => {
           <Home />
         </Route>
         <Route path="/CV-Template">
-          <PDFViewer width="1000" height="1920">
+          <PDFViewer width="100%" height="1000">
             <CVTemplate
               name={name}
               jobTitle={jobTitle}

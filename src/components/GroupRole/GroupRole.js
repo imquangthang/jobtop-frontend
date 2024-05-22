@@ -104,7 +104,7 @@ const GroupRole = () => {
     let res = await assignRolesToGroup(data);
     if (res && res.EC === 0) {
       toast.success(res.EM);
-    }else{
+    } else {
       toast.error(res.EM);
     }
   };

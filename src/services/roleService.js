@@ -4,7 +4,11 @@ const createRoles = (roles) => {
   return axios.post("/api/v1/role/create", [...roles]);
 };
 
-const fetchAllRoles = (page, limit) => {
+const fetchAllRoles = () => {
+  return axios.get(`/api/v1/role/read-roles`);
+};
+
+const fetchAllRolesWithPaging = (page, limit) => {
   return axios.get(`/api/v1/role/read?page=${page}&limit=${limit}`);
 };
 
@@ -28,4 +32,5 @@ export {
   deleteRole,
   fetchRolesByGroup,
   assignRolesToGroup,
+  fetchAllRolesWithPaging,
 };
