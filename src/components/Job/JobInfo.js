@@ -14,13 +14,17 @@ const JobInfo = (props) => {
   const [applying, setApplying] = useState(false);
 
   const [showDesFull, setShowDesFull] = useState(false);
-  const showFullText = () => {
+  const [showReqFull, setShowReqFull] = useState(false);
+  const [showRigFull, setShowRigFull] = useState(false);
+  const showDesFullText = () => {
     setShowDesFull(!showDesFull);
   };
-
-  useEffect(() => {
-    console.log(showDesFull);
-  }, [showDesFull]);
+  const showReqFullText = () => {
+    setShowReqFull(!showReqFull);
+  };
+  const showRigFullText = () => {
+    setShowRigFull(!showRigFull);
+  };
 
   useEffect(() => {
     handleGetJob();
@@ -171,7 +175,7 @@ const JobInfo = (props) => {
                           </p>
                           <div
                             className="text-center show-text"
-                            onClick={() => showFullText()}
+                            onClick={() => showDesFullText()}
                           >
                             <div>
                               {showDesFull ? "Show less " : "Show full "}
@@ -185,11 +189,49 @@ const JobInfo = (props) => {
                         </div>
                         <div className="single_wrap">
                           <h4>Requirement</h4>
-                          <p>{job.requirements}</p>
+                          <p
+                            className={
+                              showReqFull ? "mb-0" : "text_ellipsis mb-0"
+                            }
+                          >
+                            {job.requirements}
+                          </p>
+                          <div
+                            className="text-center show-text"
+                            onClick={() => showReqFullText()}
+                          >
+                            <div>
+                              {showReqFull ? "Show less " : "Show full "}
+                              {showReqFull ? (
+                                <i class="fa fa-angle-double-up"></i>
+                              ) : (
+                                <i class="fa fa-angle-double-down"></i>
+                              )}
+                            </div>
+                          </div>
                         </div>
                         <div className="single_wrap">
                           <h4>Right</h4>
-                          <p>Phúc Lợi</p>
+                          <p
+                            className={
+                              showRigFull ? "mb-0" : "text_ellipsis mb-0"
+                            }
+                          >
+                            {job.rights}
+                          </p>
+                          <div
+                            className="text-center show-text"
+                            onClick={() => showRigFullText()}
+                          >
+                            <div>
+                              {showRigFull ? "Show less " : "Show full "}
+                              {showRigFull ? (
+                                <i class="fa fa-angle-double-up"></i>
+                              ) : (
+                                <i class="fa fa-angle-double-down"></i>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="apply_job_form white-bg">
@@ -282,7 +324,7 @@ const JobInfo = (props) => {
                         <div className="job_content">
                           <ul>
                             <li>
-                              DateSub: <span> Ngày đăng tuyển</span>
+                              DateSub: <span> {job.dateSub}</span>
                             </li>
                             <li>
                               Salary: <span> {job.salary}</span>
@@ -292,9 +334,6 @@ const JobInfo = (props) => {
                             </li>
                             <li>
                               Number: <span> {job.numberEmployee}</span>
-                            </li>
-                            <li>
-                              Experience: <span> {job.experience}</span>
                             </li>
                           </ul>
                         </div>

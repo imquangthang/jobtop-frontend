@@ -18,12 +18,7 @@ const registerNewUser = (
   });
 };
 
-const registerNewCompany = (
-  email,
-  phone,
-  companyName,
-  password
-) => {
+const registerNewCompany = (email, phone, companyName, password) => {
   return axios.post("/api/v1/register-company", {
     email,
     phone,
@@ -87,6 +82,12 @@ const getListJobRecruitment = (email) => {
   return axios.get(`/api/v1/user/read/job-recruitment?email=${email}`);
 };
 
+const ChangePassword = (data) => {
+  return axios.put("/api/v1/change-pass", {
+    ...data,
+  });
+};
+
 export {
   registerNewUser,
   loginUser,
@@ -101,4 +102,5 @@ export {
   updateUser,
   getListJobRecruitment,
   registerNewCompany,
+  ChangePassword,
 };

@@ -20,13 +20,12 @@ const ModalJob = (props) => {
     careerId: "",
     address: "",
     numberEmployee: "",
-    experience: "",
     level: "",
     salary_min: "",
     salary_max: "",
-    education: "",
     description: "",
     requirements: "",
+    rights: "",
     deadline: "",
     sourcePicture: "",
   };
@@ -37,13 +36,12 @@ const ModalJob = (props) => {
     careerId: true,
     address: true,
     numberEmployee: true,
-    experience: true,
     level: true,
     salary_min: true,
     salary_max: true,
-    education: true,
     description: true,
     requirements: true,
+    rights: true,
     deadline: true,
     sourcePicture: true,
   };
@@ -97,13 +95,12 @@ const ModalJob = (props) => {
       careerId: dataModalJob.careerId,
       address: dataModalJob.address,
       numberEmployee: dataModalJob.numberEmployee,
-      experience: dataModalJob.experience,
       level: dataModalJob.level,
       salary_min: min,
       salary_max: max,
-      education: dataModalJob.education,
       description: dataModalJob.description,
       requirements: dataModalJob.requirements,
+      rights: dataModalJob.rights,
       deadline: dataModalJob.deadline,
       sourcePicture: dataModalJob.sourcePicture,
     };
@@ -130,13 +127,12 @@ const ModalJob = (props) => {
       "careerId",
       "address",
       "numberEmployee",
-      "experience",
       "level",
       "salary_min",
       "salary_max",
-      "education",
       "description",
       "requirements",
+      "rights",
       "deadline",
       "sourcePicture",
     ];
@@ -167,12 +163,11 @@ const ModalJob = (props) => {
         careerId: JobData.careerId,
         address: JobData.address,
         numberEmployee: JobData.numberEmployee,
-        experience: JobData.experience,
         level: JobData.level,
         salary: JobData.salary_min + " - " + JobData.salary_max + " Triệu",
-        education: JobData.education,
         description: JobData.description,
         requirements: JobData.requirements,
+        rights: JobData.rights,
         deadline: JobData.deadline,
         sourcePicture: JobData.sourcePicture,
       };
@@ -332,22 +327,6 @@ const ModalJob = (props) => {
             </div>
 
             <div className="col-12 col-sm-6 form-group">
-              <label>Experience:</label>
-              <input
-                className={
-                  validInputs.experience
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
-                type="text"
-                value={JobData.experience}
-                onChange={(event) =>
-                  handleOnChangeInput(event.target.value, "experience")
-                }
-              />
-            </div>
-
-            <div className="col-12 col-sm-6 form-group">
               <label>Level:</label>
               <input
                 className={
@@ -395,39 +374,7 @@ const ModalJob = (props) => {
               </div>
             </div>
 
-            <div className="col-12 col-sm-4 form-group">
-              <label>Education:</label>
-              <input
-                className={
-                  validInputs.education
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
-                type="text"
-                value={JobData.education}
-                onChange={(event) =>
-                  handleOnChangeInput(event.target.value, "education")
-                }
-              />
-            </div>
-
-            <div className="col-12 col-sm-4 form-group">
-              <label>Requirements:</label>
-              <input
-                className={
-                  validInputs.requirements
-                    ? "form-control"
-                    : "form-control is-invalid"
-                }
-                type="text"
-                value={JobData.requirements}
-                onChange={(event) =>
-                  handleOnChangeInput(event.target.value, "requirements")
-                }
-              />
-            </div>
-
-            <div className="col-12 col-sm-4 form-group">
+            <div className="col-12 col-sm-6 form-group">
               <label>Deadline:</label>
               <input
                 className={
@@ -444,6 +391,22 @@ const ModalJob = (props) => {
             </div>
 
             <div className="col-12 col-sm-12 form-group">
+              <label>Requirements:</label>
+              <input
+                className={
+                  validInputs.requirements
+                    ? "form-control"
+                    : "form-control is-invalid"
+                }
+                type="text"
+                value={JobData.requirements}
+                onChange={(event) =>
+                  handleOnChangeInput(event.target.value, "requirements")
+                }
+              />
+            </div>
+
+            <div className="col-12 col-sm-12 form-group">
               <label>Description:</label>
               <input
                 className={
@@ -455,6 +418,22 @@ const ModalJob = (props) => {
                 value={JobData.description}
                 onChange={(event) =>
                   handleOnChangeInput(event.target.value, "description")
+                }
+              />
+            </div>
+
+            <div className="col-12 col-sm-12 form-group">
+              <label>Rights:</label>
+              <input
+                className={
+                  validInputs.requirements
+                    ? "form-control"
+                    : "form-control is-invalid"
+                }
+                type="text"
+                value={JobData.rights}
+                onChange={(event) =>
+                  handleOnChangeInput(event.target.value, "rights")
                 }
               />
             </div>

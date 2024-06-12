@@ -99,7 +99,18 @@ const NavHeader = (props) => {
                               Profile
                             </Link>
                           </NavDropdown.Item>
-                          <NavDropdown.Item>Change Password</NavDropdown.Item>
+                          <NavDropdown.Item>
+                            <Link
+                              to={{
+                                pathname: "/change-pass",
+                                state: {
+                                  email: user.account.email,
+                                },
+                              }}
+                            >
+                              Change Password
+                            </Link>
+                          </NavDropdown.Item>
                           <NavDropdown.Divider />
                           <NavDropdown.Item>
                             <span onClick={() => handleLogout()}>Log out</span>

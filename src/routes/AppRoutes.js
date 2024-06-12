@@ -14,6 +14,7 @@ import CVTemplate from "../components/Profile/CVTemplate";
 import { PDFViewer } from "@react-pdf/renderer";
 import CompanyList from "../components/Company/CompanyList";
 import CompanyInfo from "../components/Company/CompanyInfo";
+import ChangePass from "../components/Password/ChangePass";
 
 const AppRoutes = (props) => {
   const location = useLocation();
@@ -39,6 +40,7 @@ const AppRoutes = (props) => {
         <PrivateRoutes path="/user-profile/:username" component={Profile} />
         <PrivateRoutes path="/company-info/:id" component={CompanyInfo} />
         <PrivateRoutes path="/job-info/:id" component={JobInfo} />
+        <PrivateRoutes path="/change-pass" component={ChangePass} />
 
         <Route path="/login">
           <Login />
